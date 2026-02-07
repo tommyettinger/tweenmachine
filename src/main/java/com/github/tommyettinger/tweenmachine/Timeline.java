@@ -243,6 +243,48 @@ public final class Timeline extends BaseTween<Timeline> {
 	}
 
 	@Override
+	public Timeline start(TweenManager manager) {
+		super.start(manager);
+		return this;
+	}
+
+	@Override
+	public Timeline delay(float delay) {
+		super.delay(delay);
+		return this;
+	}
+
+	@Override
+	public Timeline repeat(int count, float delay) {
+		super.repeat(count, delay);
+		return this;
+	}
+
+	@Override
+	public Timeline repeatYoyo(int count, float delay) {
+		super.repeatYoyo(count, delay);
+		return this;
+	}
+
+	@Override
+	public Timeline setCallback(TweenCallback callback) {
+		super.setCallback(callback);
+		return this;
+	}
+
+	@Override
+	public Timeline setCallbackTriggers(int flags) {
+		super.setCallbackTriggers(flags);
+		return this;
+	}
+
+	@Override
+	public Timeline setUserData(Object data) {
+		super.setUserData(data);
+		return this;
+	}
+
+	@Override
 	public void free() {
 		for (int i=children.size()-1; i>=0; i--) {
 			BaseTween<?> obj = children.remove(i);

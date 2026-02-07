@@ -762,7 +762,55 @@ public final class Tween extends BaseTween<Tween> {
 		return this;
 	}
 
-    @Override
+	@Override
+	public Tween start() {
+		super.start();
+		return this;
+	}
+
+	@Override
+	public Tween start(TweenManager manager) {
+		super.start(manager);
+		return this;
+	}
+
+	@Override
+	public Tween delay(float delay) {
+		super.delay(delay);
+		return this;
+	}
+
+	@Override
+	public Tween repeat(int count, float delay) {
+		super.repeat(count, delay);
+		return this;
+	}
+
+	@Override
+	public Tween repeatYoyo(int count, float delay) {
+		super.repeatYoyo(count, delay);
+		return this;
+	}
+
+	@Override
+	public Tween setCallback(TweenCallback callback) {
+		super.setCallback(callback);
+		return this;
+	}
+
+	@Override
+	public Tween setCallbackTriggers(int flags) {
+		super.setCallbackTriggers(flags);
+		return this;
+	}
+
+	@Override
+	public Tween setUserData(Object data) {
+		super.setUserData(data);
+		return this;
+	}
+
+	@Override
 	protected void initializeOverride() {
 		if (target == null) return;
 

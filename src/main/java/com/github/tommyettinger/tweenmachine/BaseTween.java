@@ -14,7 +14,7 @@ package com.github.tommyettinger.tweenmachine;
  * @see Timeline
  * @author Aurelien Ribon
  */
-public abstract class BaseTween<T> {
+public abstract class BaseTween<T extends BaseTween<T>> {
 	// General
 	private int step;
 	private int repeatCnt;
@@ -70,8 +70,8 @@ public abstract class BaseTween<T> {
 	 *
 	 * @return The current object, for chaining instructions.
 	 */
-	public T build() {
-		return (T) this;
+	public BaseTween<T> build() {
+		return this;
 	}
 
 	/**
@@ -81,11 +81,11 @@ public abstract class BaseTween<T> {
 	 *
 	 * @return The current object, for chaining instructions.
 	 */
-	public T start() {
+	public BaseTween<T> start() {
 		build();
 		currentTime = 0;
 		isStarted = true;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -94,9 +94,9 @@ public abstract class BaseTween<T> {
 	 *
 	 * @return The current object, for chaining instructions.
 	 */
-	public T start(TweenManager manager) {
+	public BaseTween<T> start(TweenManager manager) {
 		manager.add(this);
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -105,9 +105,9 @@ public abstract class BaseTween<T> {
 	 * @param delay A duration.
 	 * @return The current object, for chaining instructions.
 	 */
-	public T delay(float delay) {
+	public BaseTween<T> delay(float delay) {
 		this.delay += delay;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -143,17 +143,17 @@ public abstract class BaseTween<T> {
 	/**
 	 * Repeats the tween or timeline for a given number of times.
 	 * @param count The number of repetitions. For infinite repetition,
-	 * use Tween.INFINITY, or a negative number.
+	 * use {@link Tween#INFINITY}, or a negative number.
 	 *
 	 * @param delay A delay between each iteration.
 	 * @return The current tween or timeline, for chaining instructions.
 	 */
-	public T repeat(int count, float delay) {
+	public BaseTween<T> repeat(int count, float delay) {
 		if (isStarted) throw new RuntimeException("You can't change the repetitions of a tween or timeline once it is started");
 		repeatCnt = count;
 		repeatDelay = delay >= 0 ? delay : 0;
 		isYoyo = false;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -161,16 +161,16 @@ public abstract class BaseTween<T> {
 	 * Every two iterations, it will be played backwards.
 	 *
 	 * @param count The number of repetitions. For infinite repetition,
-	 * use Tween.INFINITY, or '-1'.
+	 * use {@link Tween#INFINITY}, or a negative number.
 	 * @param delay A delay before each repetition.
 	 * @return The current tween or timeline, for chaining instructions.
 	 */
-	public T repeatYoyo(int count, float delay) {
+	public BaseTween<T> repeatYoyo(int count, float delay) {
 		if (isStarted) throw new RuntimeException("You can't change the repetitions of a tween or timeline once it is started");
 		repeatCnt = count;
 		repeatDelay = delay >= 0 ? delay : 0;
 		isYoyo = true;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -180,9 +180,9 @@ public abstract class BaseTween<T> {
 	 *
 	 * @see TweenCallback
 	 */
-	public T setCallback(TweenCallback callback) {
+	public BaseTween<T> setCallback(TweenCallback callback) {
 		this.callback = callback;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -211,9 +211,9 @@ public abstract class BaseTween<T> {
 	 * @param flags one or more triggers, separated by the '|' operator.
 	 * @see TweenCallback
 	 */
-	public T setCallbackTriggers(int flags) {
+	public BaseTween<T> setCallbackTriggers(int flags) {
 		this.callbackTriggers = flags;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -223,9 +223,9 @@ public abstract class BaseTween<T> {
 	 * @param data Any kind of object.
 	 * @return The current tween or timeline, for chaining instructions.
 	 */
-	public T setUserData(Object data) {
+	public BaseTween<T> setUserData(Object data) {
 		userData = data;
-		return (T) this;
+		return this;
 	}
 
 	// -------------------------------------------------------------------------
@@ -403,7 +403,7 @@ public abstract class BaseTween<T> {
 	/**
 	 * Updates the tween or timeline state. <b>You may want to use a
 	 * TweenManager to update objects for you.</b>
-	 *
+	 * <br>
 	 * Slow motion, fast motion and backward play can be easily achieved by
 	 * tweaking this delta time. Multiply it by -1 to play the animation
 	 * backward, or by 0.5 to play it twice slower than its normal speed.
