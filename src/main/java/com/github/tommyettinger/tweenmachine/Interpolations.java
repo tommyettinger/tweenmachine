@@ -109,7 +109,7 @@ public final class Interpolations {
          * long as this original InterpolationFunction also has those behaviors. If this InterpolationFunction does not
          * return 0 at 0, 1 at 1, and 0.5 at 0.5, then the InterpolationFunction this returns may not be continuous.
          * <br>
-         * This is meant to create variants on "In, Out" interpolation functions that instead go "Out, In."
+         * This is meant to create variants on "In, .OUT" interpolation functions that instead go "Out, In."
          *
          * @return a new InterpolationFunction that acts like this one, but with its starting and ending halves switched
          */
@@ -136,11 +136,12 @@ public final class Interpolations {
         public final InterpolationFunction fn;
 
         /**
-         * Calls {@link #Interpolator(String, InterpolationFunction)} with {@code "linear"} and {@link #linearFunction}.
+         * Calls {@link #Interpolator(String, InterpolationFunction)} with {@code "Linear.INOUT"} and
+         * {@link #linearFunction}.
          * Because {@link #linear} is already registered with that tag and function, this isn't very useful.
          */
         public Interpolator() {
-            this("linear", linearFunction);
+            this("Linear.INOUT", linearFunction);
         }
 
         /**
@@ -217,7 +218,7 @@ public final class Interpolations {
     /**
      * Plain linear interpolation, or "lerp"; this just returns the alpha it is given.
      */
-    public static final Interpolator linear = new Interpolator("linear", linearFunction);
+    public static final Interpolator linear = new Interpolator("Linear.INOUT", linearFunction);
     /**
      * "Smoothstep" or a cubic Hermite spline.
      * <br>
@@ -226,7 +227,7 @@ public final class Interpolations {
      * harder to use in a table lookup because an output larger than 1 could mean an out-of-bounds index. Instead, we
      * use the form {@code a * a * (1 - a - a + 2)}, which always stays in the range 0.0f to 1.0f, inclusive.
      */
-    public static final Interpolator smooth = new Interpolator("smooth", a -> a * a * (1 - a - a + 2));
+    public static final Interpolator smooth = new Interpolator("Smooth.INOUT", a -> a * a * (1 - a - a + 2));
     /**
      * "Smoothstep" or a cubic Hermite spline, but flipped.
      * <br>
@@ -235,7 +236,7 @@ public final class Interpolations {
      * harder to use in a table lookup because an output larger than 1 could mean an out-of-bounds index. Instead, we
      * use the form {@code a * a * (1 - a - a + 2)}, which always stays in the range 0.0f to 1.0f, inclusive.
      */
-    public static final Interpolator smoothOutIn = new Interpolator("smoothOutIn", smooth.fn.flip());
+    public static final Interpolator smoothOutIn = new Interpolator("Smooth.OUTIN", smooth.fn.flip());
     /**
      * "Smoothstep" or a cubic Hermite spline, applied twice.
      * <br>
@@ -244,7 +245,7 @@ public final class Interpolations {
      * harder to use in a table lookup because an output larger than 1 could mean an out-of-bounds index. Instead, we
      * use the form {@code a * a * (1 - a - a + 2)}, which always stays in the range 0.0f to 1.0f, inclusive.
      */
-    public static final Interpolator smooth2 = new Interpolator("smooth2", a -> (a *= a * (1 - a - a + 2)) * a * (1 - a - a + 2));
+    public static final Interpolator smooth2 = new Interpolator("Smooth2.INOUT", a -> (a *= a * (1 - a - a + 2)) * a * (1 - a - a + 2));
     /**
      * "Smoothstep" or a cubic Hermite spline, applied twice, but flipped.
      * <br>
@@ -253,7 +254,7 @@ public final class Interpolations {
      * harder to use in a table lookup because an output larger than 1 could mean an out-of-bounds index. Instead, we
      * use the form {@code a * a * (1 - a - a + 2)}, which always stays in the range 0.0f to 1.0f, inclusive.
      */
-    public static final Interpolator smooth2OutIn = new Interpolator("smooth2OutIn", smooth2.fn.flip());
+    public static final Interpolator smooth2OutIn = new Interpolator("Smooth2.OUTIN", smooth2.fn.flip());
     /**
      * A quintic Hermite spline by Ken Perlin.
      * <br>
@@ -261,13 +262,13 @@ public final class Interpolations {
      * this tiny change (the smallest possible change here, from 10.0f to 9.999998f), giving an input of 0.99999994f, or
      * one of thousands of other inputs, would unexpectedly produce an output greater than 1.0f .
      */
-    public static final Interpolator smoother = new Interpolator("smoother", a -> a * a * a * (a * (a * 6f - 15f) + 9.999998f));
+    public static final Interpolator smoother = new Interpolator("Smoother.INOUT", a -> a * a * a * (a * (a * 6f - 15f) + 9.999998f));
     /**
      * A quintic Hermite spline by Ken Perlin, but flipped.
      * <br>
      * This was modified; see {@link #smoother}.
      */
-    public static final Interpolator smootherOutIn = new Interpolator("smootherOutIn", smoother.fn.flip());
+    public static final Interpolator smootherOutIn = new Interpolator("Smoother.OUTIN", smoother.fn.flip());
     /**
      * A quintic Hermite spline by Ken Perlin; this uses the same function as {@link #smoother}.
      * <br>
@@ -275,13 +276,13 @@ public final class Interpolations {
      * this tiny change (the smallest possible change here, from 10.0f to 9.999998f), giving an input of 0.99999994f, or
      * one of thousands of other inputs, would unexpectedly produce an output greater than 1.0f .
      */
-    public static final Interpolator fade = new Interpolator("fade", smoother.fn);
+    public static final Interpolator fade = new Interpolator("Fade.INOUT", smoother.fn);
     /**
      * A quintic Hermite spline by Ken Perlin, but flipped; this uses the same function as {@link #smootherOutIn}.
      * <br>
      * This was modified; see {@link #fade}.
      */
-    public static final Interpolator fadeOutIn = new Interpolator("fadeOutIn", smootherOutIn.fn);
+    public static final Interpolator fadeOutIn = new Interpolator("Fade.OUTIN", smootherOutIn.fn);
     /**
      * Produces an InterpolationFunction that uses the given power variable.
      * When power is greater than 1, this starts slowly, speeds up in the middle and slows down at the end. The
@@ -345,161 +346,149 @@ public final class Interpolations {
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 2.
      */
-    public static final Interpolator pow2 = new Interpolator("pow2", powFunction(2f));
+    public static final Interpolator pow2 = new Interpolator("Pow2.INOUT", powFunction(2f));
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 3.
      */
-    public static final Interpolator pow3 = new Interpolator("pow3", powFunction(3f));
+    public static final Interpolator pow3 = new Interpolator("Pow3.INOUT", powFunction(3f));
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 4.
      */
-    public static final Interpolator pow4 = new Interpolator("pow4", powFunction(4f));
+    public static final Interpolator pow4 = new Interpolator("Pow4.INOUT", powFunction(4f));
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 5.
      */
-    public static final Interpolator pow5 = new Interpolator("pow5", powFunction(5f));
+    public static final Interpolator pow5 = new Interpolator("Pow5.INOUT", powFunction(5f));
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 0.75.
      */
-    public static final Interpolator pow0_75 = new Interpolator("pow0_75", powFunction(0.75f));
+    public static final Interpolator pow0_75 = new Interpolator("Pow0_75.INOUT", powFunction(0.75f));
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 0.5. Optimized with {@link Math#sqrt(double)}.
      */
-    public static final Interpolator pow0_5 = new Interpolator("pow0_5", a -> {
+    public static final Interpolator pow0_5 = new Interpolator("Pow0_5.INOUT", a -> {
         if (a <= 0.5f) return (float) Math.sqrt(a + a) * 0.5f;
         return (float) Math.sqrt(2f - a - a) * -0.5f + 1f;
     });
     /**
      * Accelerates and decelerates using {@link #powFunction(float)} and power of 0.25.
      */
-    public static final Interpolator pow0_25 = new Interpolator("pow0_25", powFunction(0.25f));
-
-//    // This might make sense to PR to libGDX, because it should avoid a modulus and conditional.
-//    public static float oPow(float a, int power){
-//        if (a <= 0.5f) return (float) Math.pow(a * 2, power) * 0.5f;
-//        return (float) Math.pow((a - 1) * 2, power) * ((power & 1) - 0.5f) + 1;
-//    }
-//
-//    // This might make more sense as a replacement, since it allows non-integer powers.
-//    public static float aPow(float a, float power){
-//        if (a <= 0.5f) return (float) Math.pow(a + a, power) * 0.5f;
-//        return (float) Math.pow(2 - a - a, power) * -0.5f + 1;
-//    }
+    public static final Interpolator pow0_25 = new Interpolator("Pow0_25.INOUT", powFunction(0.25f));
 
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 2.
      */
-    public static final Interpolator pow2In = new Interpolator("pow2In", powInFunction(2f));
+    public static final Interpolator pow2In = new Interpolator("Pow2.IN", powInFunction(2f));
     /**
      * Slow, then fast. This uses the same function as {@link #pow2In}.
      */
-    public static final Interpolator slowFast = new Interpolator("slowFast", pow2In.fn);
+    public static final Interpolator slowFast = new Interpolator("SlowFast.IN", pow2In.fn);
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 3.
      */
-    public static final Interpolator pow3In = new Interpolator("pow3In", powInFunction(3f));
+    public static final Interpolator pow3In = new Interpolator("Pow3.IN", powInFunction(3f));
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 4.
      */
-    public static final Interpolator pow4In = new Interpolator("pow4In", powInFunction(4f));
+    public static final Interpolator pow4In = new Interpolator("Pow4.IN", powInFunction(4f));
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 5.
      */
-    public static final Interpolator pow5In = new Interpolator("pow5In", powInFunction(5f));
+    public static final Interpolator pow5In = new Interpolator("Pow5.IN", powInFunction(5f));
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 0.75.
      */
-    public static final Interpolator pow0_75In = new Interpolator("pow0_75In", powInFunction(0.75f));
+    public static final Interpolator pow0_75In = new Interpolator("Pow0_75.IN", powInFunction(0.75f));
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 0.5. Optimized with {@link Math#sqrt(double)}.
      */
-    public static final Interpolator pow0_5In = new Interpolator("pow0_5In", a -> (float) Math.sqrt(a));
+    public static final Interpolator pow0_5In = new Interpolator("Pow0_5.IN", a -> (float) Math.sqrt(a));
     /**
      * Accelerates using {@link #powInFunction(float)} and power of 0.25.
      */
-    public static final Interpolator pow0_25In = new Interpolator("pow0_25In", powInFunction(0.25f));
+    public static final Interpolator pow0_25In = new Interpolator("Pow0_25.IN", powInFunction(0.25f));
     /**
      * An alias for {@link #pow0_5In}, this is the inverse for {@link #pow2In}. Optimized with {@link Math#sqrt(double)}.
      */
-    public static final Interpolator pow2InInverse = new Interpolator("pow2InInverse", a -> (float) Math.sqrt(a));
+    public static final Interpolator sqrtIn = new Interpolator("Sqrt.IN", a -> (float) Math.sqrt(a));
     /**
      * This is the inverse for {@link #pow3In}. Calls {@link Math#cbrt(double)} and casts it to float.
      */
-    public static final Interpolator pow3InInverse = new Interpolator("pow3InInverse", a -> (float) Math.cbrt(a));
+    public static final Interpolator cbrtIn = new Interpolator("Cbrt.IN", a -> (float) Math.cbrt(a));
 
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 2.
      */
-    public static final Interpolator pow2Out = new Interpolator("pow2Out", powOutFunction(2f));
+    public static final Interpolator pow2Out = new Interpolator("Pow2.OUT", powOutFunction(2f));
     /**
      * Fast, then slow. This uses the same function as {@link #pow2Out}.
      */
-    public static final Interpolator fastSlow = new Interpolator("fastSlow", pow2Out.fn);
+    public static final Interpolator fastSlow = new Interpolator("FastSlow.OUT", pow2Out.fn);
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 3.
      */
-    public static final Interpolator pow3Out = new Interpolator("pow3Out", powOutFunction(3f));
+    public static final Interpolator pow3Out = new Interpolator("Pow3.OUT", powOutFunction(3f));
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 4.
      */
-    public static final Interpolator pow4Out = new Interpolator("pow4Out", powOutFunction(4f));
+    public static final Interpolator pow4Out = new Interpolator("Pow4.OUT", powOutFunction(4f));
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 5.
      */
-    public static final Interpolator pow5Out = new Interpolator("pow5Out", powOutFunction(5f));
+    public static final Interpolator pow5Out = new Interpolator("Pow5.OUT", powOutFunction(5f));
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 0.75.
      */
-    public static final Interpolator pow0_75Out = new Interpolator("pow0_75Out", powOutFunction(0.75f));
+    public static final Interpolator pow0_75Out = new Interpolator("Pow0_75.OUT", powOutFunction(0.75f));
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 0.5. Optimized with {@link Math#sqrt(double)}.
      */
-    public static final Interpolator pow0_5Out = new Interpolator("pow0_5Out", a -> 1f - (float) Math.sqrt(1f - a));
+    public static final Interpolator pow0_5Out = new Interpolator("Pow0_5.OUT", a -> 1f - (float) Math.sqrt(1f - a));
     /**
      * Decelerates using {@link #powOutFunction(float)} and power of 0.25.
      */
-    public static final Interpolator pow0_25Out = new Interpolator("pow0_25Out", powOutFunction(0.25f));
+    public static final Interpolator pow0_25Out = new Interpolator("Pow0_25.OUT", powOutFunction(0.25f));
     /**
      * An alias for {@link #pow0_5Out}, this is the inverse of {@link #pow2Out}. Optimized with {@link Math#sqrt(double)}.
      */
-    public static final Interpolator pow2OutInverse = new Interpolator("pow2OutInverse", a -> 1f - (float) Math.sqrt(1f - a));
+    public static final Interpolator sqrtOut = new Interpolator("Sqrt.OUT", a -> 1f - (float) Math.sqrt(1f - a));
     /**
      * This is the inverse for {@link #pow3Out}. Optimized with {@link Math#cbrt(double)}.
      */
-    public static final Interpolator pow3OutInverse = new Interpolator("pow3OutInverse", a -> 1f - (float) Math.cbrt(1.0 - a));
+    public static final Interpolator cbrtOut = new Interpolator("Cbrt.OUT", a -> 1f - (float) Math.cbrt(1f - a));
 
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 2.
      */
-    public static final Interpolator pow2OutIn = new Interpolator("pow2OutIn", powOutInFunction(2f));
+    public static final Interpolator pow2OutIn = new Interpolator("Pow2.OUTIN", powOutInFunction(2f));
     /**
      * Fast, then slow, then fast. This uses the same function as {@link #pow2OutIn}.
      */
-    public static final Interpolator fastSlowFast = new Interpolator("fastSlowFast", pow2OutIn.fn);
+    public static final Interpolator fastSlowFast = new Interpolator("FastSlowFast.OUTIN", pow2OutIn.fn);
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 3.
      */
-    public static final Interpolator pow3OutIn = new Interpolator("pow3OutIn", powOutInFunction(3f));
+    public static final Interpolator pow3OutIn = new Interpolator("Pow3.OUTIN", powOutInFunction(3f));
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 4.
      */
-    public static final Interpolator pow4OutIn = new Interpolator("pow4OutIn", powOutInFunction(4f));
+    public static final Interpolator pow4OutIn = new Interpolator("Pow4.OUTIN", powOutInFunction(4f));
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 5.
      */
-    public static final Interpolator pow5OutIn = new Interpolator("pow5OutIn", powOutInFunction(5f));
+    public static final Interpolator pow5OutIn = new Interpolator("Pow5.OUTIN", powOutInFunction(5f));
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 0.75.
      */
-    public static final Interpolator pow0_75OutIn = new Interpolator("pow0_75OutIn", powOutInFunction(0.75f));
+    public static final Interpolator pow0_75OutIn = new Interpolator("Pow0_75.OUTIN", powOutInFunction(0.75f));
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 0.5.
      */
-    public static final Interpolator pow0_5OutIn = new Interpolator("pow0_5OutIn", powOutInFunction(0.5f));
+    public static final Interpolator pow0_5OutIn = new Interpolator("Pow0_5.OUTIN", powOutInFunction(0.5f));
     /**
      * Accelerates/decelerates using {@link #powOutInFunction(float)} and power of 0.25.
      */
-    public static final Interpolator pow0_25OutIn = new Interpolator("pow0_25OutIn", powOutInFunction(0.25f));
+    public static final Interpolator pow0_25OutIn = new Interpolator("Pow0_25.OUTIN", powOutInFunction(0.25f));
 
     /**
      * Produces an InterpolationFunction that uses the given value and power variables.
@@ -549,43 +538,43 @@ public final class Interpolations {
     /**
      * Accelerates and decelerates using {@link #expFunction(float, float)}, value of 2 and power of 5.
      */
-    public static final Interpolator exp5 = new Interpolator("exp5", expFunction(2f, 5f));
+    public static final Interpolator exp5 = new Interpolator("Exp5.INOUT", expFunction(2f, 5f));
 
     /**
      * Accelerates and decelerates using {@link #expFunction(float, float)}, value of 2 and power of 10.
      */
-    public static final Interpolator exp10 = new Interpolator("exp10", expFunction(2f, 10f));
+    public static final Interpolator exp10 = new Interpolator("Exp10.INOUT", expFunction(2f, 10f));
 
     /**
      * Accelerates using {@link #expInFunction(float, float)}, value of 2 and power of 5.
      */
-    public static final Interpolator exp5In = new Interpolator("exp5In", expInFunction(2f, 5f));
+    public static final Interpolator exp5In = new Interpolator("Exp5.IN", expInFunction(2f, 5f));
 
     /**
      * Accelerates using {@link #expInFunction(float, float)}, value of 2 and power of 10.
      */
-    public static final Interpolator exp10In = new Interpolator("exp10In", expInFunction(2f, 10f));
+    public static final Interpolator exp10In = new Interpolator("Exp10.IN", expInFunction(2f, 10f));
 
     /**
      * Decelerates using {@link #expOutFunction(float, float)}, value of 2 and power of 5.
      */
-    public static final Interpolator exp5Out = new Interpolator("exp5Out", expOutFunction(2f, 5f));
+    public static final Interpolator exp5Out = new Interpolator("Exp5.OUT", expOutFunction(2f, 5f));
 
     /**
      * Decelerates using {@link #expOutFunction(float, float)}, value of 2 and power of 10.
      */
-    public static final Interpolator exp10Out = new Interpolator("exp10Out", expOutFunction(2f, 10f));
+    public static final Interpolator exp10Out = new Interpolator("Exp10.OUT", expOutFunction(2f, 10f));
 
 
     /**
      * Accelerates and decelerates using {@link #expFunction(float, float)}, value of 2 and power of 5, but flipped.
      */
-    public static final Interpolator exp5OutIn = new Interpolator("exp5OutIn", exp5.fn.flip());
+    public static final Interpolator exp5OutIn = new Interpolator("Exp5.OUTIN", exp5.fn.flip());
 
     /**
      * Accelerates and decelerates using {@link #expFunction(float, float)}, value of 2 and power of 10, but flipped.
      */
-    public static final Interpolator exp10OutIn = new Interpolator("exp10OutIn", exp10.fn.flip());
+    public static final Interpolator exp10OutIn = new Interpolator("Exp10.OUTIN", exp10.fn.flip());
 
 
     /**
@@ -607,35 +596,35 @@ public final class Interpolations {
     /**
      * Produces more results toward the edges. Uses {@code kumaraswamyFunction(0.75f, 0.75f)}.
      */
-    public static final Interpolator kumaraswamyExtremeA = new Interpolator("kumaraswamyExtremeA", kumaraswamyFunction(0.75f, 0.75f));
+    public static final Interpolator kumaraswamyExtremeA = new Interpolator("KumaraswamyExtremeA.INOUT", kumaraswamyFunction(0.75f, 0.75f));
     /**
      * Produces more results toward the edges. Uses {@code kumaraswamyFunction(0.5f, 0.5f)}.
      */
-    public static final Interpolator kumaraswamyExtremeB = new Interpolator("kumaraswamyExtremeB", kumaraswamyFunction(0.5f, 0.5f));
+    public static final Interpolator kumaraswamyExtremeB = new Interpolator("KumaraswamyExtremeB.INOUT", kumaraswamyFunction(0.5f, 0.5f));
     /**
      * Produces more results toward the edges. Uses {@code kumaraswamyFunction(0.25f, 0.25f)}.
      */
-    public static final Interpolator kumaraswamyExtremeC = new Interpolator("kumaraswamyExtremeC", kumaraswamyFunction(0.25f, 0.25f));
+    public static final Interpolator kumaraswamyExtremeC = new Interpolator("KumaraswamyExtremeC.INOUT", kumaraswamyFunction(0.25f, 0.25f));
     /**
      * Produces more results in the center. Uses {@code kumaraswamyFunction(2f, 2f)}.
      */
-    public static final Interpolator kumaraswamyCentralA = new Interpolator("kumaraswamyCentralA", kumaraswamyFunction(2f, 2f));
+    public static final Interpolator kumaraswamyCentralA = new Interpolator("KumaraswamyCentralA.INOUT", kumaraswamyFunction(2f, 2f));
     /**
      * Produces more results in the center. Uses {@code kumaraswamyFunction(4f, 4f)}.
      */
-    public static final Interpolator kumaraswamyCentralB = new Interpolator("kumaraswamyCentralB", kumaraswamyFunction(4f, 4f));
+    public static final Interpolator kumaraswamyCentralB = new Interpolator("KumaraswamyCentralB.INOUT", kumaraswamyFunction(4f, 4f));
     /**
      * Produces more results in the center. Uses {@code kumaraswamyFunction(6f, 6f)}.
      */
-    public static final Interpolator kumaraswamyCentralC = new Interpolator("kumaraswamyCentralC", kumaraswamyFunction(6f, 6f));
+    public static final Interpolator kumaraswamyCentralC = new Interpolator("KumaraswamyCentralC.INOUT", kumaraswamyFunction(6f, 6f));
     /**
      * Produces more results near 0. Uses {@code kumaraswamyFunction(1f, 5f)}.
      */
-    public static final Interpolator kumaraswamyMostlyLow = new Interpolator("kumaraswamyMostlyLow", kumaraswamyFunction(1f, 5f));
+    public static final Interpolator kumaraswamyMostlyLow = new Interpolator("KumaraswamyMostlyLow.INOUT", kumaraswamyFunction(1f, 5f));
     /**
      * Produces more results near 1. Uses {@code kumaraswamyFunction(5f, 1f)}.
      */
-    public static final Interpolator kumaraswamyMostlyHigh = new Interpolator("kumaraswamyMostlyHigh", kumaraswamyFunction(5f, 1f));
+    public static final Interpolator kumaraswamyMostlyHigh = new Interpolator("KumaraswamyMostlyHigh.INOUT", kumaraswamyFunction(5f, 1f));
 
 // The "sine" implementations use the SIN and COS tables directly to avoid a few operations inside sinTurns().
 // They use SIN_TO_COS as an offset because if the number of bits in the table changes, SIN_TO_COS will adapt.
@@ -647,15 +636,15 @@ public final class Interpolations {
     /**
      * Moves like a sine wave does; starts slowly and rises quickly.
      */
-    public static final Interpolator sineIn = new Interpolator("sineIn", a -> (1f - MathUtils.cosDeg(a * 90f)));
+    public static final Interpolator sineIn = new Interpolator("sine.IN", a -> (1f - MathUtils.cosDeg(a * 90f)));
     /**
      * Moves like a sine wave does; starts quickly and slows down.
      */
-    public static final Interpolator sineOut = new Interpolator("sineOut", a -> MathUtils.sinDeg(a * 90f));
+    public static final Interpolator sineOut = new Interpolator("sine.OUT", a -> MathUtils.sinDeg(a * 90f));
     /**
      * Moves like a sine wave does, but flipped; starts quickly, rises slowly, then ends quickly.
      */
-    public static final Interpolator sineOutIn = new Interpolator("sineOutIn", sine.fn.flip());
+    public static final Interpolator sineOutIn = new Interpolator("sine.OUTIN", sine.fn.flip());
 
 // This is here so that we can validate the old circle output against the new.
 //    public static final Interpolator circleOld = new Interpolator("circle", a -> {
@@ -678,16 +667,16 @@ public final class Interpolations {
     /**
      * When graphed, forms one circular arc, starting slowly and accelerating at the end.
      */
-    public static final Interpolator circleIn = new Interpolator("circleIn", a -> (1f - (float)Math.sqrt(1f - a * a)));
+    public static final Interpolator circleIn = new Interpolator("circle.IN", a -> (1f - (float)Math.sqrt(1f - a * a)));
     /**
      * When graphed, forms one circular arc, starting rapidly and decelerating at the end.
      */
-    public static final Interpolator circleOut = new Interpolator("circleOut", a -> ((float)Math.sqrt(a * (2f - a))));
+    public static final Interpolator circleOut = new Interpolator("circle.OUT", a -> ((float)Math.sqrt(a * (2f - a))));
     /**
      * When graphed, forms two circular arcs; it starts quickly, decelerating towards the middle, then speeds up
      * towards the end.
      */
-    public static final Interpolator circleOutIn = new Interpolator("circleOutIn", circle.fn.flip());
+    public static final Interpolator circleOutIn = new Interpolator("circle.OUTIN", circle.fn.flip());
 
     /**
      * Produces an InterpolationFunction that uses the given {@code width, height, width, height, ...} float array.
@@ -773,24 +762,24 @@ public final class Interpolations {
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 2 bounces.
      */
-    public static final Interpolator bounce2Out = new Interpolator("bounce2Out", bounceOutFunction(1.2f, 1f, 0.4f, 0.33f));
+    public static final Interpolator bounce2Out = new Interpolator("bounce2.OUT", bounceOutFunction(1.2f, 1f, 0.4f, 0.33f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 3 bounces.
      */
-    public static final Interpolator bounce3Out = new Interpolator("bounce3Out", bounceOutFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
+    public static final Interpolator bounce3Out = new Interpolator("bounce3.OUT", bounceOutFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 4 bounces.
      */
-    public static final Interpolator bounce4Out = new Interpolator("bounce4Out", bounceOutFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounce4Out = new Interpolator("bounce4.OUT", bounceOutFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 4 bounces. While both this and
      * {@link #bounce4Out} use 4 bounces, this matches the behavior of bounceOut in libGDX.
      */
-    public static final Interpolator bounceOut = new Interpolator("bounceOut", bounceOutFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounceOut = new Interpolator("bounce.OUT", bounceOutFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 5 bounces.
      */
-    public static final Interpolator bounce5Out = new Interpolator("bounce5Out", bounceOutFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
+    public static final Interpolator bounce5Out = new Interpolator("bounce5.OUT", bounceOutFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
 
     /**
      * Produces an InterpolationFunction that uses the given {@code width, height, width, height, ...} float array.
@@ -811,46 +800,46 @@ public final class Interpolations {
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 2 bounces.
      */
-    public static final Interpolator bounce2In = new Interpolator("bounce2In", bounceInFunction(1.2f, 1f, 0.4f, 0.33f));
+    public static final Interpolator bounce2In = new Interpolator("bounce2.IN", bounceInFunction(1.2f, 1f, 0.4f, 0.33f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 3 bounces.
      */
-    public static final Interpolator bounce3In = new Interpolator("bounce3In", bounceInFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
+    public static final Interpolator bounce3In = new Interpolator("bounce3.IN", bounceInFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 4 bounces.
      */
-    public static final Interpolator bounce4In = new Interpolator("bounce4In", bounceInFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounce4In = new Interpolator("bounce4.IN", bounceInFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 4 bounces. While both this and
      * {@link #bounce4In} use 4 bounces, this matches the behavior of bounceIn in libGDX.
      */
-    public static final Interpolator bounceIn = new Interpolator("bounceIn", bounceInFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounceIn = new Interpolator("bounce.IN", bounceInFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 5 bounces.
      */
-    public static final Interpolator bounce5In = new Interpolator("bounce5In", bounceInFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
+    public static final Interpolator bounce5In = new Interpolator("bounce5.IN", bounceInFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
 
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 2 bounces, but flipped.
      */
-    public static final Interpolator bounce2OutIn = new Interpolator("bounce2OutIn", bounce2.fn.flip());
+    public static final Interpolator bounce2OutIn = new Interpolator("bounce2.OUTIN", bounce2.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 3 bounces, but flipped.
      */
-    public static final Interpolator bounce3OutIn = new Interpolator("bounce3OutIn", bounce3.fn.flip());
+    public static final Interpolator bounce3OutIn = new Interpolator("bounce3.OUTIN", bounce3.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 4 bounces, but flipped.
      */
-    public static final Interpolator bounce4OutIn = new Interpolator("bounce4OutIn", bounce4.fn.flip());
+    public static final Interpolator bounce4OutIn = new Interpolator("bounce4.OUTIN", bounce4.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 4 bounces, but flipped.
      * While both this and {@link #bounce4OutIn} use 4 bounces, this matches the behavior of bounce in libGDX (flipped).
      */
-    public static final Interpolator bounceOutIn = new Interpolator("bounceOutIn", bounce.fn.flip());
+    public static final Interpolator bounceOutIn = new Interpolator("bounce.OUTIN", bounce.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 5 bounces, but flipped.
      */
-    public static final Interpolator bounce5OutIn = new Interpolator("bounce5OutIn", bounce5.fn.flip());
+    public static final Interpolator bounce5OutIn = new Interpolator("bounce5.OUTIN", bounce5.fn.flip());
 
     /**
      * Produces an InterpolationFunction that uses the given scale variable.
@@ -904,24 +893,24 @@ public final class Interpolations {
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 2.
      */
-    public static final Interpolator swing2Out = new Interpolator("swing2Out", swingOutFunction(2f));
+    public static final Interpolator swing2Out = new Interpolator("swing2.OUT", swingOutFunction(2f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 2. This uses the same function as
      * {@link #swing2Out}.
      */
-    public static final Interpolator swingOut = new Interpolator("swingOut", swing2Out.fn);
+    public static final Interpolator swingOut = new Interpolator("swing.OUT", swing2Out.fn);
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 3.
      */
-    public static final Interpolator swing3Out = new Interpolator("swing3Out", swingOutFunction(3f));
+    public static final Interpolator swing3Out = new Interpolator("swing3.OUT", swingOutFunction(3f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 0.75.
      */
-    public static final Interpolator swing0_75Out = new Interpolator("swing0_75Out", swingOutFunction(0.75f));
+    public static final Interpolator swing0_75Out = new Interpolator("swing0_75.OUT", swingOutFunction(0.75f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 0.5.
      */
-    public static final Interpolator swing0_5Out = new Interpolator("swing0_5Out", swingOutFunction(0.5f));
+    public static final Interpolator swing0_5Out = new Interpolator("swing0_5.OUT", swingOutFunction(0.5f));
 
     /**
      * Produces an InterpolationFunction that uses the given scale variable.
@@ -939,45 +928,45 @@ public final class Interpolations {
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 2.
      */
-    public static final Interpolator swing2In = new Interpolator("swing2In", swingInFunction(2f));
+    public static final Interpolator swing2In = new Interpolator("swing2.IN", swingInFunction(2f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 2. This uses the same function as
      * {@link #swing2In}.
      */
-    public static final Interpolator swingIn = new Interpolator("swingIn", swing2In.fn);
+    public static final Interpolator swingIn = new Interpolator("swing.IN", swing2In.fn);
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 3.
      */
-    public static final Interpolator swing3In = new Interpolator("swing3In", swingInFunction(3f));
+    public static final Interpolator swing3In = new Interpolator("swing3.IN", swingInFunction(3f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 0.75.
      */
-    public static final Interpolator swing0_75In = new Interpolator("swing0_75In", swingInFunction(0.75f));
+    public static final Interpolator swing0_75In = new Interpolator("swing0_75.IN", swingInFunction(0.75f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 0.5.
      */
-    public static final Interpolator swing0_5In = new Interpolator("swing0_5In", swingInFunction(0.5f));
+    public static final Interpolator swing0_5In = new Interpolator("swing0_5.IN", swingInFunction(0.5f));
 
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 2, but flipped.
      */
-    public static final Interpolator swing2OutIn = new Interpolator("swing2OutIn", swing2.fn.flip());
+    public static final Interpolator swing2OutIn = new Interpolator("swing2.OUTIN", swing2.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 1.5, but flipped.
      */
-    public static final Interpolator swingOutIn = new Interpolator("swingOutIn", swing.fn.flip());
+    public static final Interpolator swingOutIn = new Interpolator("swing.OUTIN", swing.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 3, but flipped.
      */
-    public static final Interpolator swing3OutIn = new Interpolator("swing3OutIn", swing3.fn.flip());
+    public static final Interpolator swing3OutIn = new Interpolator("swing3.OUTIN", swing3.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 0.75, but flipped.
      */
-    public static final Interpolator swing0_75OutIn = new Interpolator("swing0_75OutIn", swing0_75.fn.flip());
+    public static final Interpolator swing0_75OutIn = new Interpolator("swing0_75.OUTIN", swing0_75.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 0.5, but flipped.
      */
-    public static final Interpolator swing0_5OutIn = new Interpolator("swing0_5OutIn", swing0_5.fn.flip());
+    public static final Interpolator swing0_5OutIn = new Interpolator("swing0_5.OUTIN", swing0_5.fn.flip());
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -1023,7 +1012,7 @@ public final class Interpolations {
      * Goes extra-high near the start, using {@link #elasticOutFunction(float, float, int, float)}. Value is 2, power is
      * 10, bounces are 7, and scale is 1.
      */
-    public static final Interpolator elasticOut = new Interpolator("elasticOut", elasticOutFunction(2f, 10f, 7, 1f));
+    public static final Interpolator elasticOut = new Interpolator("elastic.OUT", elasticOutFunction(2f, 10f, 7, 1f));
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -1046,7 +1035,7 @@ public final class Interpolations {
      * Goes extra-low near the end, using {@link #elasticInFunction(float, float, int, float)}. Value is 2, power is
      * 10, bounces are 6, and scale is 1.
      */
-    public static final Interpolator elasticIn = new Interpolator("elasticIn", elasticInFunction(2f, 10f, 6, 1f));
+    public static final Interpolator elasticIn = new Interpolator("elastic.IN", elasticInFunction(2f, 10f, 6, 1f));
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -1068,124 +1057,124 @@ public final class Interpolations {
      * Stays within the mid-range, using {@link #elasticOutInFunction(float, float, int, float)}. Value is 2, power
      * is 10, bounces are 7, and scale is 1.
      */
-    public static final Interpolator elasticOutIn = new Interpolator("elasticOutIn", elasticOutInFunction(2f, 10f, 7, 1f));
+    public static final Interpolator elasticOutIn = new Interpolator("elastic.OUTIN", elasticOutInFunction(2f, 10f, 7, 1f));
 
 
     // Aliases
     /**
      * Alias for {@link #pow2}.
      */
-    public static final Interpolator quadInOut = new Interpolator("quadInOut", pow2.fn);
+    public static final Interpolator quadInOut = new Interpolator("Quad.INOUT", pow2.fn);
     /**
      * Alias for {@link #pow2In}.
      */
-    public static final Interpolator quadIn = new Interpolator("quadIn", pow2In.fn);
+    public static final Interpolator quadIn = new Interpolator("Quad.IN", pow2In.fn);
     /**
      * Alias for {@link #pow2Out}.
      */
-    public static final Interpolator quadOut = new Interpolator("quadOut", pow2Out.fn);
+    public static final Interpolator quadOut = new Interpolator("Quad.OUT", pow2Out.fn);
     /**
      * Alias for {@link #pow2OutIn}.
      */
-    public static final Interpolator quadOutIn = new Interpolator("quadOutIn", pow2OutIn.fn);
+    public static final Interpolator quadOutIn = new Interpolator("Quad.OUTIN", pow2OutIn.fn);
     /**
      * Alias for {@link #pow3}.
      */
-    public static final Interpolator cubicInOut = new Interpolator("cubicInOut", pow3.fn);
+    public static final Interpolator cubicInOut = new Interpolator("Cubic.INOUT", pow3.fn);
     /**
      * Alias for {@link #pow3In}.
      */
-    public static final Interpolator cubicIn = new Interpolator("cubicIn", pow3In.fn);
+    public static final Interpolator cubicIn = new Interpolator("Cubic.IN", pow3In.fn);
     /**
      * Alias for {@link #pow3Out}.
      */
-    public static final Interpolator cubicOut = new Interpolator("cubicOut", pow3Out.fn);
+    public static final Interpolator cubicOut = new Interpolator("CubicOUT", pow3Out.fn);
     /**
      * Alias for {@link #pow3OutIn}.
      */
-    public static final Interpolator cubicOutIn = new Interpolator("cubicOutIn", pow3OutIn.fn);
+    public static final Interpolator cubicOutIn = new Interpolator("Cubic.OUTIN", pow3OutIn.fn);
     /**
      * Alias for {@link #pow4}.
      */
-    public static final Interpolator quartInOut = new Interpolator("quartInOut", pow4.fn);
+    public static final Interpolator quartInOut = new Interpolator("Quart.INOUT", pow4.fn);
     /**
      * Alias for {@link #pow4In}.
      */
-    public static final Interpolator quartIn = new Interpolator("quartIn", pow4In.fn);
+    public static final Interpolator quartIn = new Interpolator("Quart.IN", pow4In.fn);
     /**
      * Alias for {@link #pow4Out}.
      */
-    public static final Interpolator quartOut = new Interpolator("quartOut", pow4Out.fn);
+    public static final Interpolator quartOut = new Interpolator("Quart.OUT", pow4Out.fn);
     /**
      * Alias for {@link #pow4OutIn}.
      */
-    public static final Interpolator quartOutIn = new Interpolator("quartOutIn", pow4OutIn.fn);
+    public static final Interpolator quartOutIn = new Interpolator("Quart.OUTIN", pow4OutIn.fn);
     /**
      * Alias for {@link #pow5}.
      */
-    public static final Interpolator quintInOut = new Interpolator("quintInOut", pow5.fn);
+    public static final Interpolator quintInOut = new Interpolator("Quint.INOUT", pow5.fn);
     /**
      * Alias for {@link #pow5In}.
      */
-    public static final Interpolator quintIn = new Interpolator("quintIn", pow5In.fn);
+    public static final Interpolator quintIn = new Interpolator("Quint.IN", pow5In.fn);
     /**
      * Alias for {@link #pow5Out}.
      */
-    public static final Interpolator quintOut = new Interpolator("quintOut", pow5Out.fn);
+    public static final Interpolator quintOut = new Interpolator("Quint.OUT", pow5Out.fn);
     /**
      * Alias for {@link #pow5OutIn}.
      */
-    public static final Interpolator quintOutIn = new Interpolator("quintOutIn", pow5OutIn.fn);
+    public static final Interpolator quintOutIn = new Interpolator("Quint.OUTIN", pow5OutIn.fn);
 
     /**
      * Alias for {@link #exp10}.
      */
-    public static final Interpolator expoInOut = new Interpolator("expoInOut", exp10.fn);
+    public static final Interpolator expoInOut = new Interpolator("Expo.INOUT", exp10.fn);
     /**
      * Alias for {@link #exp10In}.
      */
-    public static final Interpolator expoIn = new Interpolator("expoIn", exp10In.fn);
+    public static final Interpolator expoIn = new Interpolator("Expo.IN", exp10In.fn);
     /**
      * Alias for {@link #exp10Out}.
      */
-    public static final Interpolator expoOut = new Interpolator("expoOut", exp10Out.fn);
+    public static final Interpolator expoOut = new Interpolator("Expo.OUT", exp10Out.fn);
     /**
      * Alias for {@link #exp10OutIn}.
      */
-    public static final Interpolator expoOutIn = new Interpolator("expoOutIn", exp10OutIn.fn);
+    public static final Interpolator expoOutIn = new Interpolator("Expo.OUTIN", exp10OutIn.fn);
 
     /**
      * Alias for {@link #circle}.
      */
-    public static final Interpolator circInOut = new Interpolator("circInOut", circle.fn);
+    public static final Interpolator circInOut = new Interpolator("Circ.INOUT", circle.fn);
     /**
      * Alias for {@link #circleIn}.
      */
-    public static final Interpolator circIn = new Interpolator("circIn", circleIn.fn);
+    public static final Interpolator circIn = new Interpolator("Circ.IN", circleIn.fn);
     /**
      * Alias for {@link #circleOut}.
      */
-    public static final Interpolator circOut = new Interpolator("circOut", circleOut.fn);
+    public static final Interpolator circOut = new Interpolator("Circ.OUT", circleOut.fn);
     /**
      * Alias for {@link #circleOutIn}.
      */
-    public static final Interpolator circOutIn = new Interpolator("circOutIn", circleOutIn.fn);
+    public static final Interpolator circOutIn = new Interpolator("Circ.OUTIN", circleOutIn.fn);
     
     /**
      * Alias for {@link #swing}. Probably not an exact duplicate of the similarly-named Penner easing function.
      */
-    public static final Interpolator backInOut = new Interpolator("backInOut", swing.fn);
+    public static final Interpolator backInOut = new Interpolator("Back.INOUT", swing.fn);
     /**
      * Alias for {@link #swingIn}. Probably not an exact duplicate of the similarly-named Penner easing function.
      */
-    public static final Interpolator backIn = new Interpolator("backIn", swingIn.fn);
+    public static final Interpolator backIn = new Interpolator("Back.IN", swingIn.fn);
     /**
      * Alias for {@link #swingOut}. Probably not an exact duplicate of the similarly-named Penner easing function.
      */
-    public static final Interpolator backOut = new Interpolator("backOut", swingOut.fn);
+    public static final Interpolator backOut = new Interpolator("Back.OUT", swingOut.fn);
     /**
      * Alias for {@link #swingOutIn}. Probably not an exact duplicate of the similarly-named Penner easing function.
      */
-    public static final Interpolator backOutIn = new Interpolator("backOutIn", swingOutIn.fn);
+    public static final Interpolator backOutIn = new Interpolator("Back.OUTIN", swingOutIn.fn);
 
 }
