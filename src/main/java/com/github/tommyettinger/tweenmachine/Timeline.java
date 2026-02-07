@@ -45,34 +45,6 @@ import java.util.List;
  */
 public final class Timeline extends BaseTween<Timeline> {
 	// -------------------------------------------------------------------------
-	// Static -- pool
-	// -------------------------------------------------------------------------
-
-	private static final Pool.Callback<Timeline> poolCallback = new Pool.Callback<Timeline>() {
-		@Override public void onPool(Timeline obj) {obj.reset();}
-		@Override public void onUnPool(Timeline obj) {obj.reset();}
-	};
-
-	static final Pool<Timeline> pool = new Pool<Timeline>(10, poolCallback) {
-		@Override protected Timeline create() {return new Timeline();}
-	};
-
-	/**
-	 * Used for debug purpose. Gets the current number of empty timelines that
-	 * are waiting in the Timeline pool.
-	 */
-	public static int getPoolSize() {
-		return pool.size();
-	}
-
-	/**
-	 * Increases the minimum capacity of the pool. Capacity defaults to 10.
-	 */
-	public static void ensurePoolCapacity(int minCapacity) {
-		pool.ensureCapacity(minCapacity);
-	}
-
-	// -------------------------------------------------------------------------
 	// Static -- factories
 	// -------------------------------------------------------------------------
 
@@ -81,7 +53,7 @@ public final class Timeline extends BaseTween<Timeline> {
 	 * be delayed so that they are triggered one after the other.
 	 */
 	public static Timeline createSequence() {
-		Timeline tl = pool.get();
+		Timeline tl = new Timeline();
 		tl.setup(Modes.SEQUENCE);
 		return tl;
 	}
@@ -91,7 +63,7 @@ public final class Timeline extends BaseTween<Timeline> {
 	 * triggered all at once.
 	 */
 	public static Timeline createParallel() {
-		Timeline tl = pool.get();
+		Timeline tl = new Timeline();
 		tl.setup(Modes.PARALLEL);
 		return tl;
 	}
@@ -174,13 +146,13 @@ public final class Timeline extends BaseTween<Timeline> {
 
 	/**
 	 * Starts a nested timeline with a 'sequence' behavior. Don't forget to
-	 * call {@link end()} to close this nested timeline.
+	 * call {@link #end()} to close this nested timeline.
 	 *
 	 * @return The current timeline, for chaining instructions.
 	 */
 	public Timeline beginSequence() {
 		if (isBuilt) throw new RuntimeException("You can't push anything to a timeline once it is started");
-		Timeline tl = pool.get();
+		Timeline tl = new Timeline();
 		tl.parent = current;
 		tl.mode = Modes.SEQUENCE;
 		current.children.add(tl);
@@ -190,13 +162,13 @@ public final class Timeline extends BaseTween<Timeline> {
 
 	/**
 	 * Starts a nested timeline with a 'parallel' behavior. Don't forget to
-	 * call {@link end()} to close this nested timeline.
+	 * call {@link #end()} to close this nested timeline.
 	 *
 	 * @return The current timeline, for chaining instructions.
 	 */
 	public Timeline beginParallel() {
 		if (isBuilt) throw new RuntimeException("You can't push anything to a timeline once it is started");
-		Timeline tl = pool.get();
+		Timeline tl = new Timeline();
 		tl.parent = current;
 		tl.mode = Modes.PARALLEL;
 		current.children.add(tl);
@@ -276,8 +248,6 @@ public final class Timeline extends BaseTween<Timeline> {
 			BaseTween<?> obj = children.remove(i);
 			obj.free();
 		}
-
-		pool.free(this);
 	}
 
 	@Override

@@ -114,34 +114,6 @@ public final class Tween extends BaseTween<Tween> {
 	}
 
 	// -------------------------------------------------------------------------
-	// Static -- pool
-	// -------------------------------------------------------------------------
-
-	private static final Pool.Callback<Tween> poolCallback = new Pool.Callback<Tween>() {
-		@Override public void onPool(Tween obj) {obj.reset();}
-		@Override public void onUnPool(Tween obj) {obj.reset();}
-	};
-
-	private static final Pool<Tween> pool = new Pool<Tween>(20, poolCallback) {
-		@Override protected Tween create() {return new Tween();}
-	};
-
-	/**
-	 * Used for debug purpose. Gets the current number of objects that are
-	 * waiting in the Tween pool.
-	 */
-	public static int getPoolSize() {
-		return pool.size();
-	}
-
-	/**
-	 * Increases the minimum capacity of the pool. Capacity defaults to 20.
-	 */
-	public static void ensurePoolCapacity(int minCapacity) {
-		pool.ensureCapacity(minCapacity);
-	}
-
-	// -------------------------------------------------------------------------
 	// Static -- tween accessors
 	// -------------------------------------------------------------------------
 
@@ -205,7 +177,7 @@ public final class Tween extends BaseTween<Tween> {
 	 * @return The generated Tween.
 	 */
 	public static Tween to(Object target, int tweenType, float duration) {
-		Tween tween = pool.get();
+		Tween tween = new Tween();
 		tween.setup(target, tweenType, duration);
 		tween.ease(Quad.INOUT);
 		tween.path(TweenPaths.catmullRom);
@@ -243,7 +215,7 @@ public final class Tween extends BaseTween<Tween> {
 	 * @return The generated Tween.
 	 */
 	public static Tween from(Object target, int tweenType, float duration) {
-		Tween tween = pool.get();
+		Tween tween = new Tween();
 		tween.setup(target, tweenType, duration);
 		tween.ease(Quad.INOUT);
 		tween.path(TweenPaths.catmullRom);
@@ -281,7 +253,7 @@ public final class Tween extends BaseTween<Tween> {
 	 * @return The generated Tween.
 	 */
 	public static Tween set(Object target, int tweenType) {
-		Tween tween = pool.get();
+		Tween tween = new Tween();
 		tween.setup(target, tweenType, 0);
 		tween.ease(Quad.INOUT);
 		return tween;
@@ -310,7 +282,7 @@ public final class Tween extends BaseTween<Tween> {
 	 * @see TweenCallback
 	 */
 	public static Tween call(TweenCallback callback) {
-		Tween tween = pool.get();
+		Tween tween = new Tween();
 		tween.setup(null, -1, 0);
 		tween.setCallback(callback);
 		tween.setCallbackTriggers(TweenCallback.START);
@@ -327,7 +299,7 @@ public final class Tween extends BaseTween<Tween> {
 	 * @see Timeline
 	 */
 	public static Tween mark() {
-		Tween tween = pool.get();
+		Tween tween = new Tween();
 		tween.setup(null, -1, 0);
 		return tween;
 	}
@@ -790,12 +762,7 @@ public final class Tween extends BaseTween<Tween> {
 		return this;
 	}
 
-	@Override
-	public void free() {
-		pool.free(this);
-	}
-
-	@Override
+    @Override
 	protected void initializeOverride() {
 		if (target == null) return;
 

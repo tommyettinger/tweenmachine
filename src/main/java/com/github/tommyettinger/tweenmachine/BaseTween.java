@@ -176,7 +176,7 @@ public abstract class BaseTween<T> {
 	/**
 	 * Sets the callback. By default, it will be fired at the completion of the
 	 * tween or timeline (event COMPLETE). If you want to change this behavior
-	 * and add more triggers, use the {@link setCallbackTriggers()} method.
+	 * and add more triggers, use the {@link #setCallbackTriggers(int)} method.
 	 *
 	 * @see TweenCallback
 	 */
@@ -319,7 +319,7 @@ public abstract class BaseTween<T> {
 	/**
 	 * Returns true if the tween is finished (i.e. if the tween has reached
 	 * its end or has been killed). If you don't use a TweenManager, you may
-	 * want to call {@link free()} to reuse the object later.
+	 * want to call {@link #free()} to reuse the object later.
 	 */
 	public boolean isFinished() {
 		return isFinished || isKilled;
