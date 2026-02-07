@@ -631,52 +631,41 @@ public final class Interpolations {
     /**
      * Moves like a sine wave does; starts slowly, rises quickly, then ends slowly.
      */
-    public static final Interpolator sine = new Interpolator("sine", a -> (a = MathUtils.sinDeg(a * 90f)) * a);
+    public static final Interpolator sine = new Interpolator("Sine.INOUT", a -> (a = MathUtils.sinDeg(a * 90f)) * a);
 
     /**
      * Moves like a sine wave does; starts slowly and rises quickly.
      */
-    public static final Interpolator sineIn = new Interpolator("sine.IN", a -> (1f - MathUtils.cosDeg(a * 90f)));
+    public static final Interpolator sineIn = new Interpolator("Sine.IN", a -> (1f - MathUtils.cosDeg(a * 90f)));
     /**
      * Moves like a sine wave does; starts quickly and slows down.
      */
-    public static final Interpolator sineOut = new Interpolator("sine.OUT", a -> MathUtils.sinDeg(a * 90f));
+    public static final Interpolator sineOut = new Interpolator("Sine.OUT", a -> MathUtils.sinDeg(a * 90f));
     /**
      * Moves like a sine wave does, but flipped; starts quickly, rises slowly, then ends quickly.
      */
-    public static final Interpolator sineOutIn = new Interpolator("sine.OUTIN", sine.fn.flip());
+    public static final Interpolator sineOutIn = new Interpolator("Sine.OUTIN", sine.fn.flip());
 
-// This is here so that we can validate the old circle output against the new.
-//    public static final Interpolator circleOld = new Interpolator("circle", a -> {
-//        if (a <= 0.5f) {
-//            a *= 2;
-//            return (1 - (float)Math.sqrt(1 - a * a)) / 2;
-//        }
-//        a--;
-//        a *= 2;
-//        return ((float)Math.sqrt(1 - a * a) + 1) / 2;
-//    });
-//
     /**
      * When graphed, forms two circular arcs; it starts slowly, accelerating rapidly towards the middle, then slows down
      * towards the end.
      */
-    public static final Interpolator circle = new Interpolator("circle", a -> (a <= 0.5f
+    public static final Interpolator circle = new Interpolator("Circle.INOUT", a -> (a <= 0.5f
             ? (1f - (float)Math.sqrt(1f - a * a * 4f)) * 0.5f
             : ((float)Math.sqrt(1f - 4f * (a * (a - 2f) + 1f)) + 1f) * 0.5f));
     /**
      * When graphed, forms one circular arc, starting slowly and accelerating at the end.
      */
-    public static final Interpolator circleIn = new Interpolator("circle.IN", a -> (1f - (float)Math.sqrt(1f - a * a)));
+    public static final Interpolator circleIn = new Interpolator("Circle.IN", a -> (1f - (float)Math.sqrt(1f - a * a)));
     /**
      * When graphed, forms one circular arc, starting rapidly and decelerating at the end.
      */
-    public static final Interpolator circleOut = new Interpolator("circle.OUT", a -> ((float)Math.sqrt(a * (2f - a))));
+    public static final Interpolator circleOut = new Interpolator("Circle.OUT", a -> ((float)Math.sqrt(a * (2f - a))));
     /**
      * When graphed, forms two circular arcs; it starts quickly, decelerating towards the middle, then speeds up
      * towards the end.
      */
-    public static final Interpolator circleOutIn = new Interpolator("circle.OUTIN", circle.fn.flip());
+    public static final Interpolator circleOutIn = new Interpolator("Circle.OUTIN", circle.fn.flip());
 
     /**
      * Produces an InterpolationFunction that uses the given {@code width, height, width, height, ...} float array.
@@ -705,24 +694,24 @@ public final class Interpolations {
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 2 bounces.
      */
-    public static final Interpolator bounce2 = new Interpolator("bounce2", bounceFunction(1.2f, 1f, 0.4f, 0.33f));
+    public static final Interpolator bounce2 = new Interpolator("Bounce2.INOUT", bounceFunction(1.2f, 1f, 0.4f, 0.33f));
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 3 bounces.
      */
-    public static final Interpolator bounce3 = new Interpolator("bounce3", bounceFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
+    public static final Interpolator bounce3 = new Interpolator("Bounce3.INOUT", bounceFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 4 bounces.
      */
-    public static final Interpolator bounce4 = new Interpolator("bounce4", bounceFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounce4 = new Interpolator("Bounce4.INOUT", bounceFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 4 bounces. While both this and
      * {@link #bounce4} use 4 bounces, this matches the behavior of bounce in libGDX.
      */
-    public static final Interpolator bounce = new Interpolator("bounce", bounceFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounce = new Interpolator("Bounce.INOUT", bounceFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 5 bounces.
      */
-    public static final Interpolator bounce5 = new Interpolator("bounce5", bounceFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
+    public static final Interpolator bounce5 = new Interpolator("Bounce5.INOUT", bounceFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
 
     /**
      * Produces an InterpolationFunction that uses the given {@code width, height, width, height, ...} float array.
@@ -762,24 +751,24 @@ public final class Interpolations {
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 2 bounces.
      */
-    public static final Interpolator bounce2Out = new Interpolator("bounce2.OUT", bounceOutFunction(1.2f, 1f, 0.4f, 0.33f));
+    public static final Interpolator bounce2Out = new Interpolator("Bounce2.OUT", bounceOutFunction(1.2f, 1f, 0.4f, 0.33f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 3 bounces.
      */
-    public static final Interpolator bounce3Out = new Interpolator("bounce3.OUT", bounceOutFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
+    public static final Interpolator bounce3Out = new Interpolator("Bounce3.OUT", bounceOutFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 4 bounces.
      */
-    public static final Interpolator bounce4Out = new Interpolator("bounce4.OUT", bounceOutFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounce4Out = new Interpolator("Bounce4.OUT", bounceOutFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 4 bounces. While both this and
      * {@link #bounce4Out} use 4 bounces, this matches the behavior of bounceOut in libGDX.
      */
-    public static final Interpolator bounceOut = new Interpolator("bounce.OUT", bounceOutFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounceOut = new Interpolator("Bounce.OUT", bounceOutFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceOutFunction(float...)}, with 5 bounces.
      */
-    public static final Interpolator bounce5Out = new Interpolator("bounce5.OUT", bounceOutFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
+    public static final Interpolator bounce5Out = new Interpolator("Bounce5.OUT", bounceOutFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
 
     /**
      * Produces an InterpolationFunction that uses the given {@code width, height, width, height, ...} float array.
@@ -800,46 +789,46 @@ public final class Interpolations {
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 2 bounces.
      */
-    public static final Interpolator bounce2In = new Interpolator("bounce2.IN", bounceInFunction(1.2f, 1f, 0.4f, 0.33f));
+    public static final Interpolator bounce2In = new Interpolator("Bounce2.IN", bounceInFunction(1.2f, 1f, 0.4f, 0.33f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 3 bounces.
      */
-    public static final Interpolator bounce3In = new Interpolator("bounce3.IN", bounceInFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
+    public static final Interpolator bounce3In = new Interpolator("Bounce3.IN", bounceInFunction(0.8f, 1f, 0.4f, 0.33f, 0.2f, 0.1f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 4 bounces.
      */
-    public static final Interpolator bounce4In = new Interpolator("bounce4.IN", bounceInFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounce4In = new Interpolator("Bounce4.IN", bounceInFunction(0.65f, 1f, 0.325f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 4 bounces. While both this and
      * {@link #bounce4In} use 4 bounces, this matches the behavior of bounceIn in libGDX.
      */
-    public static final Interpolator bounceIn = new Interpolator("bounce.IN", bounceInFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
+    public static final Interpolator bounceIn = new Interpolator("Bounce.IN", bounceInFunction(0.68f, 1f, 0.34f, 0.26f, 0.2f, 0.11f, 0.15f, 0.03f));
     /**
      * Decelerates using {@link #bounceInFunction(float...)}, with 5 bounces.
      */
-    public static final Interpolator bounce5In = new Interpolator("bounce5.IN", bounceInFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
+    public static final Interpolator bounce5In = new Interpolator("Bounce5.IN", bounceInFunction(0.61f, 1f, 0.31f, 0.45f, 0.21f, 0.3f, 0.11f, 0.15f, 0.06f, 0.06f));
 
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 2 bounces, but flipped.
      */
-    public static final Interpolator bounce2OutIn = new Interpolator("bounce2.OUTIN", bounce2.fn.flip());
+    public static final Interpolator bounce2OutIn = new Interpolator("Bounce2.OUTIN", bounce2.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 3 bounces, but flipped.
      */
-    public static final Interpolator bounce3OutIn = new Interpolator("bounce3.OUTIN", bounce3.fn.flip());
+    public static final Interpolator bounce3OutIn = new Interpolator("Bounce3.OUTIN", bounce3.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 4 bounces, but flipped.
      */
-    public static final Interpolator bounce4OutIn = new Interpolator("bounce4.OUTIN", bounce4.fn.flip());
+    public static final Interpolator bounce4OutIn = new Interpolator("Bounce4.OUTIN", bounce4.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 4 bounces, but flipped.
      * While both this and {@link #bounce4OutIn} use 4 bounces, this matches the behavior of bounce in libGDX (flipped).
      */
-    public static final Interpolator bounceOutIn = new Interpolator("bounce.OUTIN", bounce.fn.flip());
+    public static final Interpolator bounceOutIn = new Interpolator("Bounce.OUTIN", bounce.fn.flip());
     /**
      * Accelerates and decelerates using {@link #bounceFunction(float...)}, with 5 bounces, but flipped.
      */
-    public static final Interpolator bounce5OutIn = new Interpolator("bounce5.OUTIN", bounce5.fn.flip());
+    public static final Interpolator bounce5OutIn = new Interpolator("Bounce5.OUTIN", bounce5.fn.flip());
 
     /**
      * Produces an InterpolationFunction that uses the given scale variable.
@@ -860,23 +849,23 @@ public final class Interpolations {
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 2.
      */
-    public static final Interpolator swing2 = new Interpolator("swing2", swingFunction(2f));
+    public static final Interpolator swing2 = new Interpolator("Swing2.INOUT", swingFunction(2f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 1.5.
      */
-    public static final Interpolator swing = new Interpolator("swing", swingFunction(1.5f));
+    public static final Interpolator swing = new Interpolator("Swing.INOUT", swingFunction(1.5f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 3.
      */
-    public static final Interpolator swing3 = new Interpolator("swing3", swingFunction(3f));
+    public static final Interpolator swing3 = new Interpolator("Swing3.INOUT", swingFunction(3f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 0.75.
      */
-    public static final Interpolator swing0_75 = new Interpolator("swing0_75", swingFunction(0.75f));
+    public static final Interpolator swing0_75 = new Interpolator("Swing0_75.INOUT", swingFunction(0.75f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 0.5.
      */
-    public static final Interpolator swing0_5 = new Interpolator("swing0_5", swingFunction(0.5f));
+    public static final Interpolator swing0_5 = new Interpolator("Swing0_5.INOUT", swingFunction(0.5f));
 
     /**
      * Produces an InterpolationFunction that uses the given scale variable.
@@ -893,24 +882,24 @@ public final class Interpolations {
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 2.
      */
-    public static final Interpolator swing2Out = new Interpolator("swing2.OUT", swingOutFunction(2f));
+    public static final Interpolator swing2Out = new Interpolator("Swing2.OUT", swingOutFunction(2f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 2. This uses the same function as
      * {@link #swing2Out}.
      */
-    public static final Interpolator swingOut = new Interpolator("swing.OUT", swing2Out.fn);
+    public static final Interpolator swingOut = new Interpolator("Swing.OUT", swing2Out.fn);
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 3.
      */
-    public static final Interpolator swing3Out = new Interpolator("swing3.OUT", swingOutFunction(3f));
+    public static final Interpolator swing3Out = new Interpolator("Swing3.OUT", swingOutFunction(3f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 0.75.
      */
-    public static final Interpolator swing0_75Out = new Interpolator("swing0_75.OUT", swingOutFunction(0.75f));
+    public static final Interpolator swing0_75Out = new Interpolator("Swing0_75.OUT", swingOutFunction(0.75f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 0.5.
      */
-    public static final Interpolator swing0_5Out = new Interpolator("swing0_5.OUT", swingOutFunction(0.5f));
+    public static final Interpolator swing0_5Out = new Interpolator("Swing0_5.OUT", swingOutFunction(0.5f));
 
     /**
      * Produces an InterpolationFunction that uses the given scale variable.
@@ -928,45 +917,45 @@ public final class Interpolations {
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 2.
      */
-    public static final Interpolator swing2In = new Interpolator("swing2.IN", swingInFunction(2f));
+    public static final Interpolator swing2In = new Interpolator("Swing2.IN", swingInFunction(2f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 2. This uses the same function as
      * {@link #swing2In}.
      */
-    public static final Interpolator swingIn = new Interpolator("swing.IN", swing2In.fn);
+    public static final Interpolator swingIn = new Interpolator("Swing.IN", swing2In.fn);
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 3.
      */
-    public static final Interpolator swing3In = new Interpolator("swing3.IN", swingInFunction(3f));
+    public static final Interpolator swing3In = new Interpolator("Swing3.IN", swingInFunction(3f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 0.75.
      */
-    public static final Interpolator swing0_75In = new Interpolator("swing0_75.IN", swingInFunction(0.75f));
+    public static final Interpolator swing0_75In = new Interpolator("Swing0_75.IN", swingInFunction(0.75f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 0.5.
      */
-    public static final Interpolator swing0_5In = new Interpolator("swing0_5.IN", swingInFunction(0.5f));
+    public static final Interpolator swing0_5In = new Interpolator("Swing0_5.IN", swingInFunction(0.5f));
 
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 2, but flipped.
      */
-    public static final Interpolator swing2OutIn = new Interpolator("swing2.OUTIN", swing2.fn.flip());
+    public static final Interpolator swing2OutIn = new Interpolator("Swing2.OUTIN", swing2.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 1.5, but flipped.
      */
-    public static final Interpolator swingOutIn = new Interpolator("swing.OUTIN", swing.fn.flip());
+    public static final Interpolator swingOutIn = new Interpolator("Swing.OUTIN", swing.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 3, but flipped.
      */
-    public static final Interpolator swing3OutIn = new Interpolator("swing3.OUTIN", swing3.fn.flip());
+    public static final Interpolator swing3OutIn = new Interpolator("Swing3.OUTIN", swing3.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 0.75, but flipped.
      */
-    public static final Interpolator swing0_75OutIn = new Interpolator("swing0_75.OUTIN", swing0_75.fn.flip());
+    public static final Interpolator swing0_75OutIn = new Interpolator("Swing0_75.OUTIN", swing0_75.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 0.5, but flipped.
      */
-    public static final Interpolator swing0_5OutIn = new Interpolator("swing0_5.OUTIN", swing0_5.fn.flip());
+    public static final Interpolator swing0_5OutIn = new Interpolator("Swing0_5.OUTIN", swing0_5.fn.flip());
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -988,7 +977,7 @@ public final class Interpolations {
      * Goes extra low, then extra-high, using {@link #elasticFunction(float, float, int, float)}. Value is 2, power is
      * 10, bounces are 7, and scale is 1.
      */
-    public static final Interpolator elastic = new Interpolator("elastic", elasticFunction(2f, 10f, 7, 1f));
+    public static final Interpolator elastic = new Interpolator("Elastic.INOUT", elasticFunction(2f, 10f, 7, 1f));
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -1012,7 +1001,7 @@ public final class Interpolations {
      * Goes extra-high near the start, using {@link #elasticOutFunction(float, float, int, float)}. Value is 2, power is
      * 10, bounces are 7, and scale is 1.
      */
-    public static final Interpolator elasticOut = new Interpolator("elastic.OUT", elasticOutFunction(2f, 10f, 7, 1f));
+    public static final Interpolator elasticOut = new Interpolator("Elastic.OUT", elasticOutFunction(2f, 10f, 7, 1f));
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -1035,7 +1024,7 @@ public final class Interpolations {
      * Goes extra-low near the end, using {@link #elasticInFunction(float, float, int, float)}. Value is 2, power is
      * 10, bounces are 6, and scale is 1.
      */
-    public static final Interpolator elasticIn = new Interpolator("elastic.IN", elasticInFunction(2f, 10f, 6, 1f));
+    public static final Interpolator elasticIn = new Interpolator("Elastic.IN", elasticInFunction(2f, 10f, 6, 1f));
 
     /**
      * Produces an InterpolationFunction that uses the given value, power, bounces, and scale variables.
@@ -1057,7 +1046,7 @@ public final class Interpolations {
      * Stays within the mid-range, using {@link #elasticOutInFunction(float, float, int, float)}. Value is 2, power
      * is 10, bounces are 7, and scale is 1.
      */
-    public static final Interpolator elasticOutIn = new Interpolator("elastic.OUTIN", elasticOutInFunction(2f, 10f, 7, 1f));
+    public static final Interpolator elasticOutIn = new Interpolator("Elastic.OUTIN", elasticOutInFunction(2f, 10f, 7, 1f));
 
 
     // Aliases
@@ -1088,7 +1077,7 @@ public final class Interpolations {
     /**
      * Alias for {@link #pow3Out}.
      */
-    public static final Interpolator cubicOut = new Interpolator("CubicOUT", pow3Out.fn);
+    public static final Interpolator cubicOut = new Interpolator("Cubic.OUT", pow3Out.fn);
     /**
      * Alias for {@link #pow3OutIn}.
      */
