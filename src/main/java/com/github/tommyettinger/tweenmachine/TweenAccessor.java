@@ -34,7 +34,7 @@ package com.github.tommyettinger.tweenmachine;
  *     public void setValues(Particle target, int tweenType, float[] newValues) {
  *         switch (tweenType) {
  *             case X: target.setX(newValues[0]); break;
- *             case Y: target.setY(newValues[1]); break;
+ *             case Y: target.setY(newValues[0]); break;
  *             case XY:
  *                 target.setX(newValues[0]);
  *                 target.setY(newValues[1]);

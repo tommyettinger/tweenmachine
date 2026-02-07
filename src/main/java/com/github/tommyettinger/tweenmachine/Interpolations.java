@@ -37,24 +37,17 @@ public final class Interpolations {
     }
 
     /**
-     * Like the fract() function available in GLSL shaders, this gets the fractional part of the float
-     * input {@code t} by returning a result similar to {@code t - Math.floor(t)} . For
-     * negative inputs, this doesn't behave differently than for positive; both will always return a
-     * float that is <code>0 &lt;= t &lt; 1</code> .
-     * @param t a finite float that should be between about {@code -Math.pow(2, 23)} and {@code Math.pow(2, 23)}
-     * @return the fractional part of t, as a float <code>0 &lt;= result &lt; 1</code>
+     * Maps String tag keys to Interpolator values, storing them typically in insertion order.
+     * This is not intended for external use, but is public in case it is ever needed directly.
+     * You can also obtain the tags on their own using {@link #getTags()}, or an Array with every Interpolator using
+     * {@link #getInterpolators()}.
      */
-    public static float fract(float t) {
-        t -= (int)t - 1;
-        return t - (int)t;
-    }
-
-
-    private static final OrderedMap<String, Interpolator> REGISTRY = new OrderedMap<>(128);
+    public static final OrderedMap<String, Interpolator> REGISTRY = new OrderedMap<>(128);
 
     /**
      * Looks up the given {@code tag} in a registry of Interpolators, and if there exists one with that name, returns
      * it. Otherwise, this returns null.
+     *
      * @param tag a tag used to register an Interpolator here
      * @return the Interpolator registered with the given tag, or null if none exists for that tag
      */
@@ -65,154 +58,21 @@ public final class Interpolations {
     /**
      * Gets a direct reference to the tags used as keys for the Interpolator registry. This Array can be sorted if you
      * want, or otherwise rearranged. If new tags are registered, this will reflect those changes.
+     *
      * @return an Array containing every String tag registered for an Interpolator; direct reference
      */
-    public static Array<String> getTagArray() {
+    public static Array<String> getTags() {
         return REGISTRY.orderedKeys();
     }
 
     /**
-     * Allocates a new Array of Interpolator, fills it with every registered Interpolator, and returns that Array.
+     * Allocates a new Array of Interpolator items, fills it with every registered Interpolator, and returns that Array.
+     * This is not a direct reference; modifying the Array won't change the registered contents.
+     *
      * @return a new Array containing every Interpolator registered
      */
-    public static Array<Interpolator> getInterpolatorArray() {
+    public static Array<Interpolator> getInterpolators() {
         return REGISTRY.values().toArray();
-    }
-
-    /**
-     * A type of function that takes a float from 0 to 1 (usually, and also usually inclusive) and returns a float that
-     * is typically in the 0 to 1 range or just outside it. Meant for easier communication with libGDX's Interpolation
-     * class by using one of its Interpolation constants with a method reference. This is a functional interface whose
-     * functional method is {@link #apply(float)}.
-     */
-    public interface InterpolationFunction {
-        /**
-         * Given a float {@code alpha}, which is almost always between 0 and 1 inclusive, gets a typically-different
-         * float that is usually (but not always) between 0 and 1 inclusive.
-         * @param alpha almost always between 0 and 1, inclusive
-         * @return a value that is usually between 0 and 1, inclusive, for inputs between 0 and 1
-         */
-        float apply(float alpha);
-
-        /**
-         * Maps a call to {@link #apply(float)} from the 0-1 range to the {@code start}-{@code end} range.
-         * Usually (but not always), this returns a float between start and end, inclusive.
-         * @param start the inclusive lower bound; some functions can return less
-         * @param end the inclusive upper bound; some functions can return more
-         * @param alpha almost always between 0 and 1, inclusive
-         * @return a value that is usually between start and end, inclusive, for alpha between 0 and 1
-         */
-        default float apply(float start, float end, float alpha) {
-            return start + apply(alpha) * (end - start);
-        }
-
-        /**
-         * Effectively splits the interpolation function at its midway point (where alpha is 0.5) and returns a new
-         * InterpolationFunction that interpolates like the first half when alpha is greater than 0.5, and interpolates
-         * like the second half when alpha is less than 0.5. In both cases, the returned function will be offset so that
-         * it starts at 0 when alpha is 0, ends at 1 when alpha is 1, and returns 0.5 when alpha is 0.5, but only so
-         * long as this original InterpolationFunction also has those behaviors. If this InterpolationFunction does not
-         * return 0 at 0, 1 at 1, and 0.5 at 0.5, then the InterpolationFunction this returns may not be continuous.
-         * <br>
-         * This is meant to create variants on "In, .OUT" interpolation functions that instead go "Out, In."
-         *
-         * @return a new InterpolationFunction that acts like this one, but with its starting and ending halves switched
-         */
-        default InterpolationFunction flip() {
-            return a -> apply(fract(a+0.5f)) + Math.copySign(0.5f, a - 0.5f);
-        }
-    }
-
-    /**
-     * A simple wrapper around an {@link InterpolationFunction} so it is associated with a String {@link #tag}. This
-     * also implements InterpolationFunction, and wraps the {@link #fn} it stores to clamp its input to the 0 to 1
-     * range (preventing potentially troublesome complications when large or negative inputs come in).
-     */
-    public static class Interpolator implements InterpolationFunction {
-        /**
-         * A unique String that identifies this object.
-         * @see #getTag()
-         */
-        public final String tag;
-        /**
-         * The InterpolationFunction this actually uses to do its math work.
-         * @see #getFn()
-         */
-        public final InterpolationFunction fn;
-
-        /**
-         * Calls {@link #Interpolator(String, InterpolationFunction)} with {@code "Linear.INOUT"} and
-         * {@link #linearFunction}.
-         * Because {@link #linear} is already registered with that tag and function, this isn't very useful.
-         */
-        public Interpolator() {
-            this("Linear.INOUT", linearFunction);
-        }
-
-        /**
-         * Creates an Interpolator that will use the given {@code fn} and registers it with the given tag. The tag must
-         * be unique; if {@link Interpolations#get(String)} returns a non-null value when looking up the given tag, then
-         * if you create an Interpolator with that tag, the existing value will be overwritten.
-         * @param tag a unique String that can be used as a key to access this with {@link Interpolations#get(String)}
-         * @param fn an {@link InterpolationFunction} to wrap
-         */
-        public Interpolator(String tag, InterpolationFunction fn) {
-            this.tag = tag;
-            this.fn = fn;
-            REGISTRY.put(tag, this);
-        }
-
-        /**
-         * Does bounds-checking on the input before passing it to {@link #fn}. If alpha is less than 0, it is treated as
-         * 0; if alpha is greater than 1, it is treated as 1. Note that the output is still unrestricted, so
-         * InterpolationFunctions that can produce results outside the 0-1 range still can do that.
-         * @param alpha almost always between 0 and 1, inclusive, and will be clamped to ensure that
-         * @return an interpolated value based on alpha, which may (for some functions) be negative, or greater than 1
-         */
-        @Override
-        public float apply(float alpha) {
-            return fn.apply(Math.min(Math.max(alpha, 0f), 1f));
-        }
-
-        /**
-         * Gets the tag for this Interpolator, which is a unique String that identifies this object. If another
-         * Interpolator tries to use the same tag, this Interpolator will be un-registered and will no longer be
-         * returnable from {@link #get(String)}.
-         * @return the tag String
-         */
-        public String getTag() {
-            return tag;
-        }
-
-        /**
-         * Gets the InterpolationFunction this actually uses to do its math work. Calling this function on its own does
-         * not behave the same way as calling {@link Interpolator#apply(float)} on this Interpolator; the Interpolator
-         * method clamps the result if the {@code alpha} parameter is below 0 or above 1.
-         * @return the InterpolationFunction this uses
-         */
-        public InterpolationFunction getFn() {
-            return fn;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Interpolator that = (Interpolator) o;
-
-            return tag.equals(that.tag);
-        }
-
-        @Override
-        public int hashCode() {
-            return tag.hashCode();
-        }
-
-        @Override
-        public String toString() {
-            return tag;
-        }
     }
 
     /**
@@ -687,12 +547,12 @@ public final class Interpolations {
         final InterpolationFunction bOut = bounceOutFunction(pairs), iOut = o -> {
             float test = o + pairs[0] * 0.5f;
             if (test < pairs[0]) return test / (pairs[0] * 0.5f) - 1f;
-            return bOut.apply(o);
+            return bOut.compute(o);
         };
 
         return a -> {
-            if(a <= 0.5f) return (1f - iOut.apply(1f - a - a)) * 0.5f;
-            return iOut.apply(a + a - 1) * 0.5f + 0.5f;
+            if(a <= 0.5f) return (1f - iOut.compute(1f - a - a)) * 0.5f;
+            return iOut.compute(a + a - 1) * 0.5f + 0.5f;
         };
     }
 
@@ -788,7 +648,7 @@ public final class Interpolations {
      */
     public static InterpolationFunction bounceInFunction(final float... pairs) {
         final InterpolationFunction bOut = bounceOutFunction(pairs);
-        return a -> 1f - bOut.apply(1f - a);
+        return a -> 1f - bOut.compute(1f - a);
     }
 
     /**
