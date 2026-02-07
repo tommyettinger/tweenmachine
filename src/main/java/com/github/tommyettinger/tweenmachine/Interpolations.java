@@ -17,12 +17,16 @@
 package com.github.tommyettinger.tweenmachine;
 
 import com.badlogic.gdx.math.MathUtils;
-
-import java.util.LinkedHashMap;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.OrderedMap;
 
 /**
  * Provides predefined {@link Interpolator} constants and ways to generate {@link InterpolationFunction} instances, as
- * well as acting as the registry for known Interpolator values so that they can be looked up by name.
+ * well as acting as the registry for known Interpolator values so that they can be looked up by name. This has every
+ * <a href="http://robertpenner.com/easing/">Penner easing function</a>, though not all with equivalent behavior. Unlike
+ * the original Universal Tween Engine, every easing function that has an IN and an OUT version now also has an INOUT
+ * and OUTIN version. The original didn't supply any OUTIN versions.
+ * <br>
  * <a href="https://tommyettinger.github.io/digital/interpolators.html">You can view the graphs for every Interpolator here</a>.
  */
 public final class Interpolations {
@@ -46,7 +50,7 @@ public final class Interpolations {
     }
 
 
-    private static final LinkedHashMap<String, Interpolator> REGISTRY = new LinkedHashMap<>(128);
+    private static final OrderedMap<String, Interpolator> REGISTRY = new OrderedMap<>(128);
 
     /**
      * Looks up the given {@code tag} in a registry of Interpolators, and if there exists one with that name, returns
@@ -59,19 +63,20 @@ public final class Interpolations {
     }
 
     /**
-     * Allocates a new String array, fills it with every tag registered for an Interpolator, and returns that array.
-     * @return an array containing every String tag registered for an Interpolator
+     * Gets a direct reference to the tags used as keys for the Interpolator registry. This Array can be sorted if you
+     * want, or otherwise rearranged. If new tags are registered, this will reflect those changes.
+     * @return an Array containing every String tag registered for an Interpolator; direct reference
      */
-    public static String[] getTagArray() {
-        return REGISTRY.keySet().toArray(new String[0]);
+    public static Array<String> getTagArray() {
+        return REGISTRY.orderedKeys();
     }
 
     /**
-     * Allocates a new Interpolator array, fills it with every registered Interpolator, and returns that array.
-     * @return an array containing every Interpolator registered
+     * Allocates a new Array of Interpolator, fills it with every registered Interpolator, and returns that Array.
+     * @return a new Array containing every Interpolator registered
      */
-    public static Interpolator[] getInterpolatorArray() {
-        return REGISTRY.values().toArray(new Interpolator[0]);
+    public static Array<Interpolator> getInterpolatorArray() {
+        return REGISTRY.values().toArray();
     }
 
     /**
