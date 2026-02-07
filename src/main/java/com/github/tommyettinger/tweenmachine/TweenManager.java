@@ -1,6 +1,10 @@
 package com.github.tommyettinger.tweenmachine;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.OrderedSet;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,8 +52,12 @@ public class TweenManager {
 	// Public API
 	// -------------------------------------------------------------------------
 
-	private final ArrayList<BaseTween<?>> objects = new ArrayList<BaseTween<?>>(20);
+	private final OrderedSet<BaseTween<?>> unique = new OrderedSet<>(20);
+	private final Array<BaseTween<?>> objects = unique.orderedItems();
 	private boolean isPaused = false;
+
+	public TweenManager() {
+	}
 
 	/**
 	 * Adds a tween or timeline to the manager and starts or restarts it.
@@ -57,7 +65,7 @@ public class TweenManager {
 	 * @return The manager, for instruction chaining.
 	 */
 	public TweenManager add(BaseTween<?> object) {
-		if (!objects.contains(object)) objects.add(object);
+		unique.add(object);
 		if (object.isAutoStartEnabled) object.start();
 		return this;
 	}
@@ -67,9 +75,8 @@ public class TweenManager {
 	 * to the given target object.
 	 */
 	public boolean containsTarget(Object target) {
-		for (int i=0, n=objects.size(); i<n; i++) {
-			BaseTween<?> obj = objects.get(i);
-			if (obj.containsTarget(target)) return true;
+		for (int i=0, n=objects.size; i<n; i++) {
+			if (objects.get(i).containsTarget(target)) return true;
 		}
 		return false;
 	}
@@ -79,43 +86,39 @@ public class TweenManager {
 	 * to the given target object and to the given tween type.
 	 */
 	public boolean containsTarget(Object target, int tweenType) {
-		for (int i=0, n=objects.size(); i<n; i++) {
-			BaseTween<?> obj = objects.get(i);
-			if (obj.containsTarget(target, tweenType)) return true;
+		for (int i=0, n=objects.size; i<n; i++) {
+			if (objects.get(i).containsTarget(target, tweenType)) return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Kills every managed tweens and timelines.
+	 * Kills every managed tween and timelines.
 	 */
 	public void killAll() {
-		for (int i=0, n=objects.size(); i<n; i++) {
-			BaseTween<?> obj = objects.get(i);
-			obj.kill();
+		for (int i=0, n=objects.size; i<n; i++) {
+			objects.get(i).kill();
 		}
 	}
 
 	/**
-	 * Kills every tweens associated to the given target. Will also kill every
+	 * Kills every tween associated to the given target. Will also kill every
 	 * timelines containing a tween associated to the given target.
 	 */
 	public void killTarget(Object target) {
-		for (int i=0, n=objects.size(); i<n; i++) {
-			BaseTween<?> obj = objects.get(i);
-			obj.killTarget(target);
+		for (int i=0, n=objects.size; i<n; i++) {
+			objects.get(i).killTarget(target);
 		}
 	}
 
 	/**
-	 * Kills every tweens associated to the given target and tween type. Will
+	 * Kills every tween associated to the given target and tween type. Will
 	 * also kill every timelines containing a tween associated to the given
 	 * target and tween type.
 	 */
 	public void killTarget(Object target, int tweenType) {
-		for (int i=0, n=objects.size(); i<n; i++) {
-			BaseTween<?> obj = objects.get(i);
-			obj.killTarget(target, tweenType);
+		for (int i=0, n=objects.size; i<n; i++) {
+			objects.get(i).killTarget(target, tweenType);
 		}
 	}
 
@@ -123,6 +126,7 @@ public class TweenManager {
 	 * Increases the minimum capacity of the manager. Defaults to 20.
 	 */
 	public void ensureCapacity(int minCapacity) {
+		unique.ensureCapacity(minCapacity);
 		objects.ensureCapacity(minCapacity);
 	}
 
@@ -153,19 +157,19 @@ public class TweenManager {
 	 * backward, or by 0.5 to play it twice slower than its normal speed.
 	 */
 	public void update(float delta) {
-		for (int i=objects.size()-1; i>=0; i--) {
+		for (int i=objects.size-1; i>=0; i--) {
 			BaseTween<?> obj = objects.get(i);
 			if (obj.isFinished() && obj.isAutoRemoveEnabled) {
-				objects.remove(i);
+				unique.removeIndex(i);
 				obj.free();
 			}
 		}
 
 		if (!isPaused) {
 			if (delta >= 0) {
-				for (int i=0, n=objects.size(); i<n; i++) objects.get(i).update(delta);
+				for (int i=0, n=objects.size; i<n; i++) objects.get(i).update(delta);
 			} else {
-				for (int i=objects.size()-1; i>=0; i--) objects.get(i).update(delta);
+				for (int i=objects.size-1; i>=0; i--) objects.get(i).update(delta);
 			}
 		}
 	}
@@ -178,7 +182,7 @@ public class TweenManager {
 	 * To get the count of running tweens, see {@link #getRunningTweensCount()}.
 	 */
 	public int size() {
-		return objects.size();
+		return objects.size;
 	}
 
 	/**
@@ -207,16 +211,16 @@ public class TweenManager {
 	 * <b>Provided for debug purpose only.</b>
 	 */
 	public List<BaseTween<?>> getObjects() {
-		return Collections.unmodifiableList(objects);
+		return Arrays.asList(Arrays.copyOf(objects.items, objects.size));
 	}
 
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
 
-	private static int getTweensCount(List<BaseTween<?>> objs) {
+	private static int getTweensCount(Array<BaseTween<?>> objs) {
 		int cnt = 0;
-		for (int i=0, n=objs.size(); i<n; i++) {
+		for (int i=0, n=objs.size; i<n; i++) {
 			BaseTween<?> obj = objs.get(i);
 			if (obj instanceof Tween) cnt += 1;
 			else cnt += getTweensCount(((Timeline)obj).getChildren());
@@ -224,9 +228,9 @@ public class TweenManager {
 		return cnt;
 	}
 
-	private static int getTimelinesCount(List<BaseTween<?>> objs) {
+	private static int getTimelinesCount(Array<BaseTween<?>> objs) {
 		int cnt = 0;
-		for (int i=0, n=objs.size(); i<n; i++) {
+		for (int i=0, n=objs.size; i<n; i++) {
 			BaseTween<?> obj = objs.get(i);
 			if (obj instanceof Timeline) {
 				cnt += 1 + getTimelinesCount(((Timeline)obj).getChildren());
