@@ -37,7 +37,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class TweenEquationGraphing extends ApplicationAdapter {
-    static final boolean WRITE = false;
+    static final boolean WRITE = true;
 
     private static final int width = 300, height = 420;
 
