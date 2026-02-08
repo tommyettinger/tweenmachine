@@ -1,6 +1,5 @@
 package com.github.tommyettinger.tweenmachine;
 
-import com.github.tommyettinger.tweenmachine.equations.Quad;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +71,7 @@ import java.util.Map;
  *
  * @see TweenAccessor
  * @see TweenManager
- * @see TweenEquation
+ * @see Interpolator
  * @see Timeline
  * @author Aurelien Ribon
  */
@@ -179,7 +178,7 @@ public final class Tween extends BaseTween<Tween> {
 	public static Tween to(Object target, int tweenType, float duration) {
 		Tween tween = new Tween();
 		tween.setup(target, tweenType, duration);
-		tween.ease(Quad.INOUT);
+		tween.ease(Interpolations.quadInOut);
 		tween.path(TweenPaths.catmullRom);
 		return tween;
 	}
@@ -217,7 +216,7 @@ public final class Tween extends BaseTween<Tween> {
 	public static Tween from(Object target, int tweenType, float duration) {
 		Tween tween = new Tween();
 		tween.setup(target, tweenType, duration);
-		tween.ease(Quad.INOUT);
+		tween.ease(Interpolations.quadInOut);
 		tween.path(TweenPaths.catmullRom);
 		tween.isFrom = true;
 		return tween;
@@ -255,7 +254,7 @@ public final class Tween extends BaseTween<Tween> {
 	public static Tween set(Object target, int tweenType) {
 		Tween tween = new Tween();
 		tween.setup(target, tweenType, 0);
-		tween.ease(Quad.INOUT);
+		tween.ease(Interpolations.quadInOut);
 		return tween;
 	}
 
@@ -313,7 +312,7 @@ public final class Tween extends BaseTween<Tween> {
 	private Class<?> targetClass;
 	private TweenAccessor<Object> accessor;
 	private int type;
-	private TweenEquation equation;
+	private Interpolator equation;
 	private TweenPath path;
 
 	// General
@@ -387,31 +386,17 @@ public final class Tween extends BaseTween<Tween> {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Sets the easing equation of the tween. Existing equations are located in
-	 * <i>com.github.tommyettinger.tweenmachine.equations</i> package, but you can of course
-	 * implement your owns, see {@link TweenEquation}. You can also use the
+	 * Sets the easing equation of the tween. Existing equations are defined in
+	 * {@link Interpolations}, but you can of course
+	 * implement your owns, see {@link Interpolator}. You can also use the
 	 * {@link TweenEquations} static instances to quickly access all the
 	 * equations. Default equation is Quad.INOUT.
-	 * <p/>
-	 *
-	 * <b>Proposed equations are:</b><br/>
-	 * - Linear.INOUT,<br/>
-	 * - Quad.IN | OUT | INOUT,<br/>
-	 * - Cubic.IN | OUT | INOUT,<br/>
-	 * - Quart.IN | OUT | INOUT,<br/>
-	 * - Quint.IN | OUT | INOUT,<br/>
-	 * - Circ.IN | OUT | INOUT,<br/>
-	 * - Sine.IN | OUT | INOUT,<br/>
-	 * - Expo.IN | OUT | INOUT,<br/>
-	 * - Back.IN | OUT | INOUT,<br/>
-	 * - Bounce.IN | OUT | INOUT,<br/>
-	 * - Elastic.IN | OUT | INOUT
 	 *
 	 * @return The current tween, for chaining instructions.
 	 * @see TweenEquation
 	 * @see TweenEquations
 	 */
-	public Tween ease(TweenEquation easeEquation) {
+	public Tween ease(Interpolator easeEquation) {
 		this.equation = easeEquation;
 		return this;
 	}
@@ -710,7 +695,7 @@ public final class Tween extends BaseTween<Tween> {
 	/**
 	 * Gets the easing equation.
 	 */
-	public TweenEquation getEasing() {
+	public Interpolator getEasing() {
 		return equation;
 	}
 

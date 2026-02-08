@@ -21,8 +21,8 @@ public class Interpolator implements InterpolationFunction {
 
     /**
      * Calls {@link #Interpolator(String, InterpolationFunction)} with {@code "Linear.INOUT"} and
-     * {@link #linearFunction}.
-     * Because {@link #linear} is already registered with that tag and function, this isn't very useful.
+     * {@link Interpolations#linearFunction}.
+     * Because {@link Interpolations#linear} is already registered with that tag and function, this isn't very useful.
      */
     public Interpolator() {
         this("Linear.INOUT", Interpolations.linearFunction);
@@ -58,7 +58,7 @@ public class Interpolator implements InterpolationFunction {
     /**
      * Gets the tag for this Interpolator, which is a unique String that identifies this object. If another
      * Interpolator tries to use the same tag, this Interpolator will be un-registered and will no longer be
-     * returnable from {@link #get(String)}.
+     * returnable from {@link Interpolations#get(String)}.
      *
      * @return the tag String
      */
