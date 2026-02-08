@@ -7,16 +7,16 @@ package com.github.tommyettinger.tweenmachine;
  */
 public class TweenUtils {
 	/**
-	 * Takes an easing name and gives you the corresponding Interpolator.
+	 * Takes an easing name and gives you the corresponding TweenEquation.
 	 * You probably won't need this, but tools will love that.
 	 * This is present only for compatibility with the Universal Tween Engine.
-	 * This is equivalent to {@link Interpolations#get(String)}.
+	 * This is equivalent to {@link TweenEquations#get(String)}.
 	 *
-	 * @param easingName The name of an Interpolator, like "Quad.INOUT".
-	 * @return The parsed Interpolator, or null if there is no match.
+	 * @param easingName The name of a TweenEquation, like "Quad.INOUT".
+	 * @return The parsed TweenEquation, or null if there is no match.
 	 */
-	public static Interpolator parseEasing(String easingName) {
-		return Interpolations.get(easingName);
+	public static TweenEquation parseEasing(String easingName) {
+		return TweenEquations.get(easingName);
 	}
 
 	/**

@@ -71,7 +71,7 @@ import java.util.Map;
  *
  * @see TweenAccessor
  * @see TweenManager
- * @see Interpolator
+ * @see TweenEquation
  * @see Timeline
  * @author Aurelien Ribon
  */
@@ -178,7 +178,7 @@ public final class Tween extends BaseTween<Tween> {
 	public static Tween to(Object target, int tweenType, float duration) {
 		Tween tween = new Tween();
 		tween.setup(target, tweenType, duration);
-		tween.ease(Interpolations.quadInOut);
+		tween.ease(TweenEquations.quadInOut);
 		tween.path(TweenPaths.catmullRom);
 		return tween;
 	}
@@ -216,7 +216,7 @@ public final class Tween extends BaseTween<Tween> {
 	public static Tween from(Object target, int tweenType, float duration) {
 		Tween tween = new Tween();
 		tween.setup(target, tweenType, duration);
-		tween.ease(Interpolations.quadInOut);
+		tween.ease(TweenEquations.quadInOut);
 		tween.path(TweenPaths.catmullRom);
 		tween.isFrom = true;
 		return tween;
@@ -254,7 +254,7 @@ public final class Tween extends BaseTween<Tween> {
 	public static Tween set(Object target, int tweenType) {
 		Tween tween = new Tween();
 		tween.setup(target, tweenType, 0);
-		tween.ease(Interpolations.quadInOut);
+		tween.ease(TweenEquations.quadInOut);
 		return tween;
 	}
 
@@ -312,7 +312,7 @@ public final class Tween extends BaseTween<Tween> {
 	private Class<?> targetClass;
 	private TweenAccessor<Object> accessor;
 	private int type;
-	private Interpolator equation;
+	private TweenEquation equation;
 	private TweenPath path;
 
 	// General
@@ -387,15 +387,15 @@ public final class Tween extends BaseTween<Tween> {
 
 	/**
 	 * Sets the easing equation of the tween. Existing equations are defined in
-	 * {@link Interpolations}, but you can of course
-	 * implement your owns, see {@link Interpolator}.
+	 * {@link TweenEquations}, but you can of course
+	 * implement your owns, see {@link TweenEquation}.
 	 * Default equation is Quad.INOUT.
 	 *
 	 * @return The current tween, for chaining instructions.
-	 * @see Interpolations
-	 * @see Interpolator
+	 * @see TweenEquations
+	 * @see TweenEquation
 	 */
-	public Tween ease(Interpolator easeEquation) {
+	public Tween ease(TweenEquation easeEquation) {
 		this.equation = easeEquation;
 		return this;
 	}
@@ -694,7 +694,7 @@ public final class Tween extends BaseTween<Tween> {
 	/**
 	 * Gets the easing equation.
 	 */
-	public Interpolator getEasing() {
+	public TweenEquation getEasing() {
 		return equation;
 	}
 
