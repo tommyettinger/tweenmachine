@@ -1,5 +1,6 @@
 package com.github.tommyettinger.tweenmachine.paths;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.tweenmachine.TweenPath;
 
 /**
@@ -8,7 +9,7 @@ import com.github.tommyettinger.tweenmachine.TweenPath;
 public class Linear implements TweenPath {
 	@Override
 	public float compute(float t, float[] points, int pointsCnt) {
-		int segment = (int) Math.floor((pointsCnt-1) * t);
+		int segment = MathUtils.floor((pointsCnt-1) * t);
 		segment = Math.max(segment, 0);
 		segment = Math.min(segment, pointsCnt-2);
 

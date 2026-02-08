@@ -167,7 +167,7 @@ public final class TweenEquations {
     /**
      * Produces a TweenFunction that uses the given power variable.
      * When power is greater than 1, this starts quickly, slows down in the middle and speeds up at the end. The
-     * rate of acceleration and deceleration changes based on the parameter. Non-integer parameters are supported,
+     * rate of acceleration and deceleration changes based on the parameter. Noninteger parameters are supported,
      * unlike the Pow in libGDX. Negative powers are not supported.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
@@ -184,7 +184,7 @@ public final class TweenEquations {
     /**
      * Produces a TweenFunction that uses the given power variable.
      * When power is greater than 1, this starts slowly and speeds up toward the end. The
-     * rate of acceleration changes based on the parameter. Non-integer parameters are supported,
+     * rate of acceleration changes based on the parameter. Noninteger parameters are supported,
      * unlike the PowIn in libGDX. Negative powers are not supported.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
@@ -197,7 +197,7 @@ public final class TweenEquations {
     /**
      * Produces a TweenFunction that uses the given power variable.
      * When power is greater than 1, this starts quickly and slows down toward the end. The
-     * rate of deceleration changes based on the parameter. Non-integer parameters are supported,
+     * rate of deceleration changes based on the parameter. Noninteger parameters are supported,
      * unlike the PowOut in libGDX. Negative powers are not supported.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
@@ -602,10 +602,6 @@ public final class TweenEquations {
             }
             float z = 4f / (width * width) * height * b;
             float f = 1f - z * (width - b);
-            // pretty sure this is equivalent to the 2 lines above. Not certain.
-//            a /= width;
-//            float z = 4 / width * height * a;
-//            return 1 - (z - z * a) * width;
             return a >= 0.98f ? MathUtils.lerp(f, 1f, 50f * (a - 0.98f)) : f;
 
         };

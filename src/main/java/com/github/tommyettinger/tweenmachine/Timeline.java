@@ -2,10 +2,6 @@ package com.github.tommyettinger.tweenmachine;
 
 import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * A Timeline can be used to create complex animations made of sequences and
  * parallel sets of Tweens.
@@ -288,8 +284,7 @@ public final class Timeline extends BaseTween<Timeline> {
 	@Override
 	public void free() {
 		for (int i=children.size-1; i>=0; i--) {
-			BaseTween<?> obj = children.removeIndex(i);
-			obj.free();
+			children.removeIndex(i).free();
 		}
 	}
 

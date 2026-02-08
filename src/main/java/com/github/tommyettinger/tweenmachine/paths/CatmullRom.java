@@ -1,5 +1,6 @@
 package com.github.tommyettinger.tweenmachine.paths;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.github.tommyettinger.tweenmachine.TweenPath;
 
 /**
@@ -8,7 +9,7 @@ import com.github.tommyettinger.tweenmachine.TweenPath;
 public class CatmullRom implements TweenPath {
 	@Override
 	public float compute(float t, float[] points, int pointsCnt) {
-		int segment = (int) Math.floor((pointsCnt-1) * t);
+		int segment = MathUtils.floor((pointsCnt-1) * t);
 		segment = Math.max(segment, 0);
 		segment = Math.min(segment, pointsCnt-2);
 
@@ -29,7 +30,7 @@ public class CatmullRom implements TweenPath {
 		float t1 = (c - a) * 0.5f;
 		float t2 = (d - b) * 0.5f;
 
-		float h1 = +2 * t * t * t - 3 * t * t + 1;
+		float h1 =  2 * t * t * t - 3 * t * t + 1;
 		float h2 = -2 * t * t * t + 3 * t * t;
 		float h3 = t * t * t - 2 * t * t + t;
 		float h4 = t * t * t - t * t;

@@ -255,7 +255,7 @@ public abstract class BaseTween<T extends BaseTween<T>> {
 	}
 
 	/**
-	 * Gets the delay occuring between two iterations.
+	 * Gets the delay occurring between two iterations.
 	 */
 	public float getRepeatDelay() {
 		return repeatDelay;

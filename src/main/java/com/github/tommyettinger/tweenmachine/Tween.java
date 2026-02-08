@@ -55,7 +55,7 @@ import java.util.Map;
  * them (if they are managed of course).</b>
  * <p/>
  *
- * You need to periodicaly update the tween engine, in order to compute the new
+ * You need to periodically update the tween engine, in order to compute the new
  * values. If your tweens are managed, only update the manager; else you need
  * to call {@link #update(float)} on your tweens periodically.
  * <p/>
@@ -116,11 +116,11 @@ public final class Tween extends BaseTween<Tween> {
 	// Static -- tween accessors
 	// -------------------------------------------------------------------------
 
-	private static final Map<Class<?>, TweenAccessor<?>> registeredAccessors = new HashMap<Class<?>, TweenAccessor<?>>();
+	private static final Map<Class<?>, TweenAccessor<?>> registeredAccessors = new HashMap<>();
 
 	/**
 	 * Registers an accessor with the class of an object. This accessor will be
-	 * used by tweens applied to every objects implementing the registered
+	 * used by tweens applied to every object implementing the registered
 	 * class, or inheriting from it.
 	 *
 	 * @param someClass An object class.
@@ -733,6 +733,7 @@ public final class Tween extends BaseTween<Tween> {
 	// Overrides
 	// -------------------------------------------------------------------------
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Tween build() {
 		if (target == null) return this;
