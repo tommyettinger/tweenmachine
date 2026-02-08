@@ -388,13 +388,12 @@ public final class Tween extends BaseTween<Tween> {
 	/**
 	 * Sets the easing equation of the tween. Existing equations are defined in
 	 * {@link Interpolations}, but you can of course
-	 * implement your owns, see {@link Interpolator}. You can also use the
-	 * {@link TweenEquations} static instances to quickly access all the
-	 * equations. Default equation is Quad.INOUT.
+	 * implement your owns, see {@link Interpolator}.
+	 * Default equation is Quad.INOUT.
 	 *
 	 * @return The current tween, for chaining instructions.
-	 * @see TweenEquation
-	 * @see TweenEquations
+	 * @see Interpolations
+	 * @see Interpolator
 	 */
 	public Tween ease(Interpolator easeEquation) {
 		this.equation = easeEquation;
