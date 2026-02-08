@@ -27,8 +27,7 @@ import com.badlogic.gdx.utils.OrderedMap;
  * the original Universal Tween Engine, every easing function that has an IN and an OUT version now also has an INOUT
  * and OUTIN version. The original didn't supply any OUTIN versions.
  * <br>
- * <a href="https://tommyettinger.github.io/digital/interpolators.html">You can view the graphs for every TweenEquation here</a>.
- * The names may be slightly different, like how the original Penner easing functions used different naming.
+ * <a href="https://tommyettinger.github.io/tweenmachine/equations.html">You can view the graphs for every TweenEquation here</a>.
  */
 public final class TweenEquations {
     /**
