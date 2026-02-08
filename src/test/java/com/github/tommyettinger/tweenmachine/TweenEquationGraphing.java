@@ -47,7 +47,7 @@ public class TweenEquationGraphing extends ApplicationAdapter {
     SpriteBatch batch;
     StretchViewport view;
     GlyphLayout name;
-    Array<TweenEquation> interpolators;
+    Array<TweenEquation> equations;
     int index;
     double[] k = new double[]{1.0, 1.0};
     Color gradient = new Color(1f, 1f, 1f, 1f);
@@ -61,23 +61,23 @@ public class TweenEquationGraphing extends ApplicationAdapter {
         batch = new SpriteBatch();
         sd = new ShapeDrawer(batch, new TextureRegion(fontRegion, 510, 510, 1, 1));
 
-        interpolators = TweenEquations.getTweenEquations();
+        equations = TweenEquations.getTweenEquations();
 
-        index = interpolators.size - 1;
-        current = interpolators.get(index);
+        index = equations.size - 1;
+        current = equations.get(index);
         name = new GlyphLayout(font, "[BLACK]" + current.tag, Color.WHITE, width, Align.center, false);
         if(WRITE){
             System.out.println("<table>\n<tr><th>Graph A</th><th>Name A</th><th>Graph B</th><th>Name B</th><th>Graph C</th><th>Name C</th></tr>");
             int i = 0;
-            for (; i < interpolators.size; i++) {
+            for (; i < equations.size; i++) {
                 if((i % 3) == 0) System.out.println("<tr>");
-                current = interpolators.get(index = i);
+                current = equations.get(index = i);
                 name.setText(font, "[BLACK]" + current.tag, Color.WHITE, width, Align.center, false);
                 render();
                 Pixmap pixmap = Pixmap.createFromFrameBuffer(0, 0, width, height);
-                PixmapIO.writePNG(Gdx.files.local("out/interpolators/" + current.tag + ".png"), pixmap, 9, true);
+                PixmapIO.writePNG(Gdx.files.local("out/eqs/" + current.tag + ".png"), pixmap, 9, true);
                 pixmap.dispose();
-                System.out.println("<td><img src=\"interpolators/"+current.tag+".png\" alt=\""+current.tag+"\" /></td><td>"+current.tag+"</td>");
+                System.out.println("<td><img src=\"eqs/"+current.tag+".png\" alt=\""+current.tag+"\" /></td><td>"+current.tag+"</td>");
                 if((i % 3) == 2) System.out.println("</tr>");
             }
             if((i % 3) == 0)
@@ -91,11 +91,11 @@ public class TweenEquationGraphing extends ApplicationAdapter {
     @Override
     public void render() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-            current = interpolators.get(index = (index + 1) % interpolators.size);
+            current = equations.get(index = (index + 1) % equations.size);
             name.setText(font, "[BLACK]"+ current.tag, Color.WHITE, width, Align.center, false);
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-            current = interpolators.get(index = (index + interpolators.size - 1) % interpolators.size);
+            current = equations.get(index = (index + equations.size - 1) % equations.size);
             name.setText(font, "[BLACK]"+ current.tag, Color.WHITE, width, Align.center, false);
         }
 
