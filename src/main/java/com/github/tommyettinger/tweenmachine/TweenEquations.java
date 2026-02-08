@@ -462,38 +462,36 @@ public final class TweenEquations {
     /**
      * Produces more results toward the edges. Uses {@code kumaraswamyFunction(0.75f, 0.75f)}.
      */
-    public static final TweenEquation kumaraswamyExtremeA = new TweenEquation("KumaraswamyExtremeA.INOUT", kumaraswamyFunction(0.75f, 0.75f));
+    public static final TweenEquation extremeA = new TweenEquation("ExtremeA.INOUT", kumaraswamyFunction(0.75f, 0.75f));
     /**
      * Produces more results toward the edges. Uses {@code kumaraswamyFunction(0.5f, 0.5f)}.
      */
-    public static final TweenEquation kumaraswamyExtremeB = new TweenEquation("KumaraswamyExtremeB.INOUT", kumaraswamyFunction(0.5f, 0.5f));
+    public static final TweenEquation extremeB = new TweenEquation("ExtremeB.INOUT", kumaraswamyFunction(0.5f, 0.5f));
     /**
      * Produces more results toward the edges. Uses {@code kumaraswamyFunction(0.25f, 0.25f)}.
      */
-    public static final TweenEquation kumaraswamyExtremeC = new TweenEquation("KumaraswamyExtremeC.INOUT", kumaraswamyFunction(0.25f, 0.25f));
+    public static final TweenEquation extremeC = new TweenEquation("ExtremeC.INOUT", kumaraswamyFunction(0.25f, 0.25f));
     /**
      * Produces more results in the center. Uses {@code kumaraswamyFunction(2f, 2f)}.
      */
-    public static final TweenEquation kumaraswamyCentralA = new TweenEquation("KumaraswamyCentralA.INOUT", kumaraswamyFunction(2f, 2f));
+    public static final TweenEquation centralA = new TweenEquation("CentralA.INOUT", kumaraswamyFunction(2f, 2f));
     /**
      * Produces more results in the center. Uses {@code kumaraswamyFunction(4f, 4f)}.
      */
-    public static final TweenEquation kumaraswamyCentralB = new TweenEquation("KumaraswamyCentralB.INOUT", kumaraswamyFunction(4f, 4f));
+    public static final TweenEquation centralB = new TweenEquation("CentralB.INOUT", kumaraswamyFunction(4f, 4f));
     /**
      * Produces more results in the center. Uses {@code kumaraswamyFunction(6f, 6f)}.
      */
-    public static final TweenEquation kumaraswamyCentralC = new TweenEquation("KumaraswamyCentralC.INOUT", kumaraswamyFunction(6f, 6f));
+    public static final TweenEquation centralC = new TweenEquation("CentralC.INOUT", kumaraswamyFunction(6f, 6f));
     /**
      * Produces more results near 0. Uses {@code kumaraswamyFunction(1f, 5f)}.
      */
-    public static final TweenEquation kumaraswamyMostlyLow = new TweenEquation("KumaraswamyMostlyLow.INOUT", kumaraswamyFunction(1f, 5f));
+    public static final TweenEquation mostlyLow = new TweenEquation("MostlyLow.INOUT", kumaraswamyFunction(1f, 5f));
     /**
      * Produces more results near 1. Uses {@code kumaraswamyFunction(5f, 1f)}.
      */
-    public static final TweenEquation kumaraswamyMostlyHigh = new TweenEquation("KumaraswamyMostlyHigh.INOUT", kumaraswamyFunction(5f, 1f));
+    public static final TweenEquation mostlyHigh = new TweenEquation("MostlyHigh.INOUT", kumaraswamyFunction(5f, 1f));
 
-// The "sine" implementations use the SIN and COS tables directly to avoid a few operations inside sinTurns().
-// They use SIN_TO_COS as an offset because if the number of bits in the table changes, SIN_TO_COS will adapt.
     /**
      * Moves like a sine wave does; starts slowly, rises quickly, then ends slowly.
      */
