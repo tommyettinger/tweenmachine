@@ -1015,20 +1015,34 @@ public final class Interpolations {
     public static final Interpolator circOutIn = new Interpolator("Circ.OUTIN", circleOutIn.fn);
     
     /**
-     * Alias for {@link #swing}. Probably not an exact duplicate of the similarly-named Penner easing function.
+     * Alias for {@link #swing}.
      */
-    public static final Interpolator backInOut = new Interpolator("Back.INOUT", swing.fn);
+    public static final Interpolator swingInOut = swing;
+
     /**
-     * Alias for {@link #swingIn}. Probably not an exact duplicate of the similarly-named Penner easing function.
+     * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 1.2974547.
+     * This matches the default Penner easing function easeInOutBack exactly.
      */
-    public static final Interpolator backIn = new Interpolator("Back.IN", swingIn.fn);
+    public static final Interpolator back = new Interpolator("Back.INOUT", swingFunction(1.2974547f));
     /**
-     * Alias for {@link #swingOut}. Probably not an exact duplicate of the similarly-named Penner easing function.
+     * Alias for {@link #back}.
      */
-    public static final Interpolator backOut = new Interpolator("Back.OUT", swingOut.fn);
+    public static final Interpolator backInOut = back;
     /**
-     * Alias for {@link #swingOutIn}. Probably not an exact duplicate of the similarly-named Penner easing function.
+     * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 1.70158.
+     * This matches the default Penner easing function easeOutBack exactly.
      */
-    public static final Interpolator backOutIn = new Interpolator("Back.OUTIN", swingOutIn.fn);
+    public static final Interpolator backOut = new Interpolator("Back.OUT", swingOutFunction(1.70158f));
+    /**
+     * Goes extra-high, using {@link #swingInFunction(float)} and scale of 1.70158.
+     * This matches the default Penner easing function easeOutBack exactly.
+     */
+    public static final Interpolator backIn = new Interpolator("Back.IN", swingInFunction(1.70158f));
+    /**
+     * Should stay in-range, using {@link #swingFunction(float)} and scale of 1.2974547, but flipped.
+     * This matches the exact parameter of the default Penner easing function easeInOutBack, but with the start and
+     * end halves swapped and offset.
+     */
+    public static final Interpolator backOutIn = new Interpolator("Back.OUTIN", back.fn.flip());
 
 }
