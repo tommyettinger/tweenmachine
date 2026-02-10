@@ -907,6 +907,106 @@ public final class TweenEquations {
      */
     public static final TweenEquation elasticOutIn = new TweenEquation("Elastic.OUTIN", elasticOutInFunction(2f, 10f, 7, 1f));
 
+    // Legacy compatibility
+
+    /**
+     * Produces a TweenFunction that uses the given a and p variables.
+     * This should act like {@code Elastic.INOUT} in Universal Tween Engine; what the a and p variables are isn't clear.
+     * <br>
+     * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
+     * than 1.
+     * @return a TweenFunction that will use the given configuration
+     */
+    public static TweenFunction jigglyFunction(final float a, final float p) {
+        final float b, s;
+        if(a < 1f) {
+            b = 1f;
+            s = p * 0.25f;
+        } else {
+            b = a;
+            s = p / MathUtils.PI2 * MathUtils.asin(1f / a);
+        }
+        return alpha -> {
+            if(alpha >= 1f) return 1f;
+            float t = alpha * 2f;
+            if(t < 1f) return -0.5f*(b*(float)Math.pow(2f,10f*(t-=1f)) * MathUtils.sin( (t-s)*MathUtils.PI2/p));
+            return b*(float)Math.pow(2f,-10f*(t-=1f)) * MathUtils.sin( (t-s)*MathUtils.PI2/p )*0.5f + 1f;
+        };
+    }
+    /**
+     * Goes extra low, then extra-high, using {@link #jigglyFunction(float, float)}.
+     * This should act like {@code Elastic.INOUT} in Universal Tween Engine.
+     * a is 1.0, p is 0.45.
+     */
+    public static final TweenEquation jiggly = new TweenEquation("Jiggly.INOUT", jigglyFunction(1f, 0.45f));
+
+//    /**
+//     * Produces a TweenFunction that uses the given a and p variables.
+//     * This should act like {@code Elastic.OUT} in Universal Tween Engine; what the a and p variables are isn't clear.
+//     * <br>
+//     * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
+//     * than 1.
+//     * @return a TweenFunction that will use the given configuration
+//     */
+//    public static TweenFunction jigglyOutFunction(final float value, final float power, final int bounces,
+//                                                   final float scale) {
+//        final float bounce = bounces * (0.5f - (bounces & 1));
+//        return a -> {
+//            float f = (1f - (float) Math.pow(value, power * -a) * MathUtils.sin((bounce - a * bounce) * MathUtils.PI2) * scale);
+//            return a <= 0.02f ? MathUtils.lerp(0f, f, a * 50f) : f;
+//        };
+//    }
+//
+//    /**
+//     * Goes extra-high near the start, using {@link #jigglyOutFunction(float, float, int, float)}. Value is 2, power is
+//     * 10, bounces are 7, and scale is 1.
+//     */
+//    public static final TweenEquation jigglyOut = new TweenEquation("Jiggly.OUT", jigglyOutFunction(2f, 10f, 7, 1f));
+//
+//    /**
+//     * Produces a TweenFunction that uses the given a and p variables.
+//     * This should act like {@code Elastic.IN} in Universal Tween Engine; what the a and p variables are isn't clear.
+//     * <br>
+//     * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
+//     * than 1.
+//     * @return a TweenFunction that will use the given configuration
+//     */
+//    public static TweenFunction jigglyInFunction(final float value, final float power, final int bounces,
+//                                                  final float scale) {
+//        final float bounce = bounces * (0.5f - (bounces & 1)) * MathUtils.PI2;
+//        return a -> {
+//            float f = (float) Math.pow(value, power * (a - 1)) * MathUtils.sin(a * bounce) * scale;
+//            return a >= 0.98f ? MathUtils.lerp(f, 1f, 50f * (a - 0.98f)) : f;
+//        };
+//    }
+//    /**
+//     * Goes extra-low near the end, using {@link #jigglyInFunction(float, float, int, float)}. Value is 2, power is
+//     * 10, bounces are 6, and scale is 1.
+//     */
+//    public static final TweenEquation jigglyIn = new TweenEquation("Jiggly.IN", jigglyInFunction(2f, 10f, 6, 1f));
+//
+//    /**
+//     * Produces a TweenFunction that uses the given a and p variables.
+//     * This should act like {@code Elastic.INOUT} in Universal Tween Engine, but with the IN and OUT halves swapped;
+//     * what the a and p variables are isn't clear.
+//     * <br>
+//     * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
+//     * than 1.
+//     * @return a TweenFunction that will use the given configuration
+//     */
+//    public static TweenFunction jigglyOutInFunction(final float value, final float power, final int bounces,
+//                                                     final float scale) {
+//        final float bounce = (bounces * (0.5f - (bounces & 1)) - 0.25f) * MathUtils.PI2;
+//        return a -> (a > 0.5f)
+//                ? (float)Math.pow(value, power * ((a += a - 1) - 1f)) * MathUtils.sin(a * bounce) * scale * 0.5f + 0.5f
+//                : 0.5f - (float)Math.pow(value, power * ((a = 1f - a - a) - 1f)) * MathUtils.sin(a * bounce) * scale * 0.5f;
+//    }
+//    /**
+//     * Stays within the mid-range, using {@link #jigglyOutInFunction(float, float, int, float)}. Value is 2, power
+//     * is 10, bounces are 7, and scale is 1.
+//     */
+//    public static final TweenEquation jigglyOutIn = new TweenEquation("Jiggly.OUTIN", jigglyOutInFunction(2f, 10f, 7, 1f));
+
 
     // Aliases
     /**
