@@ -939,7 +939,7 @@ public final class TweenEquations {
      * This should act like {@code Elastic.INOUT} in Universal Tween Engine.
      * Base is 2, exponent is 10, scale is 1.0, intensity is 0.45.
      */
-    public static final TweenEquation elastic = new TweenEquation("Elastic.INOUT", elasticFunction(2, 10, 1f, 0.45f));
+    public static final TweenEquation elastic = new TweenEquation("Elastic.INOUT", elasticFunction(2, 10, 0.45f, 1f));
 
     /**
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
@@ -969,7 +969,7 @@ public final class TweenEquations {
      * This should act like {@code Elastic.OUT} in Universal Tween Engine.
      * Base is 2, exponent is 10, scale is 1, intensity is 0.3.
      */
-    public static final TweenEquation elasticOut = new TweenEquation("Elastic.OUT", elasticOutFunction(2f, 10f, 1f, 0.3f));
+    public static final TweenEquation elasticOut = new TweenEquation("Elastic.OUT", elasticOutFunction(2f, 10f, 0.3f, 1f));
 
     /**
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
@@ -998,7 +998,7 @@ public final class TweenEquations {
      * This should act like {@code Elastic.IN} in Universal Tween Engine.
      * Base is 2, exponent is 10, scale is 1, intensity is 0.3.
      */
-    public static final TweenEquation elasticIn = new TweenEquation("Elastic.IN", elasticInFunction(2f, 10f, 1f, 0.3f));
+    public static final TweenEquation elasticIn = new TweenEquation("Elastic.IN", elasticInFunction(2f, 10f, 0.3f, 1f));
 
     /**
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
