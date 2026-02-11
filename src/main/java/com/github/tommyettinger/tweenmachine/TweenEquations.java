@@ -911,107 +911,110 @@ public final class TweenEquations {
     public static final TweenEquation springOutIn = new TweenEquation("Spring.OUTIN", springOutInFunction(2f, 10f, 7, 1f));
 
     /**
-     * Produces a TweenFunction that uses the given scale and intensity variables.
-     * This should act like {@code Elastic.INOUT} in Universal Tween Engine, with a and p called scale and intensity.
+     * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
+     * When base and exponent are 2 and 10, this should act like {@code Elastic.INOUT} in Universal Tween Engine,
+     * with a and p called scale and intensity.
      * <br>
      * The functions this method produces are not well-behaved when their {@code alpha} parameter is less than 0.
      * @return a TweenFunction that will use the given configuration
      */
-    public static TweenFunction elasticFunction(final float scale, final float intensity) {
-        final float b, s;
+    public static TweenFunction elasticFunction(final float base, final float exponent, final float intensity, final float scale) {
+        final float a, s;
         if(scale < 1f) {
-            b = 1f;
+            a = 1f;
             s = intensity * 0.25f;
         } else {
-            b = scale;
+            a = scale;
             s = intensity / MathUtils.PI2 * MathUtils.asin(1f / scale);
         }
         return alpha -> {
             if(alpha >= 1f) return 1f;
             float t = alpha * 2f;
-            if(t < 1f) return -0.5f*(b*(float)Math.pow(2f,10f*(t-=1f)) * MathUtils.sin( (t-s)*MathUtils.PI2/intensity));
-            return b*(float)Math.pow(2f,-10f*(t-=1f)) * MathUtils.sin( (t-s)*MathUtils.PI2/intensity )*0.5f + 1f;
+            if(t < 1f) return -0.5f*(a*(float)Math.pow(base,exponent*(t-=1f)) * MathUtils.sin( (t-s)*MathUtils.PI2/intensity));
+            return a*(float)Math.pow(base,-exponent*(t-=1f)) * MathUtils.sin( (t-s)*MathUtils.PI2/intensity )*0.5f + 1f;
         };
     }
     /**
-     * Goes extra low, then extra-high, using {@link #elasticFunction(float, float)}.
+     * Goes extra low, then extra-high, using {@link #elasticFunction(float, float, float, float)}.
      * This should act like {@code Elastic.INOUT} in Universal Tween Engine.
-     * Scale is 1.0, intensity is 0.45.
+     * Base is 2, exponent is 10, scale is 1.0, intensity is 0.45.
      */
-    public static final TweenEquation elastic = new TweenEquation("Elastic.INOUT", elasticFunction(1f, 0.45f));
+    public static final TweenEquation elastic = new TweenEquation("Elastic.INOUT", elasticFunction(2, 10, 1f, 0.45f));
 
     /**
-     * Produces a TweenFunction that uses the given scale and intensity variables.
-     * This should act like {@code Elastic.OUT} in Universal Tween Engine, with a and p called scale and intensity.
+     * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
+     * When base and exponent are 2 and 10, this should act like {@code Elastic.OUT} in Universal Tween Engine,
+     * with a and p called scale and intensity.
      * <br>
      * The functions this method produces are not well-behaved when their {@code alpha} parameter is less than 0.
      * @return a TweenFunction that will use the given configuration
      */
-    public static TweenFunction elasticOutFunction(final float scale, final float intensity) {
-        final float b, s;
+    public static TweenFunction elasticOutFunction(final float base, final float exponent, final float intensity, final float scale) {
+        final float a, s;
         if(scale < 1f) {
-            b = 1f;
+            a = 1f;
             s = intensity * 0.25f;
         } else {
-            b = scale;
+            a = scale;
             s = intensity / MathUtils.PI2 * MathUtils.asin(1f / scale);
         }
         return alpha -> {
             if(alpha >= 1f) return 1f;
-            return b*(float)Math.pow(2f,-10f*alpha) * MathUtils.sin((alpha-s)*MathUtils.PI2/intensity) + 1f;
+            return a*(float)Math.pow(base,-exponent*alpha) * MathUtils.sin((alpha-s)*MathUtils.PI2/intensity) + 1f;
         };
     }
 
     /**
-     * Goes extra-high near the start, using {@link #elasticOutFunction(float, float)}.
+     * Goes extra-high near the start, using {@link #elasticOutFunction(float, float, float, float)}.
      * This should act like {@code Elastic.OUT} in Universal Tween Engine.
-     * Scale is 1, intensity is 0.3.
+     * Base is 2, exponent is 10, scale is 1, intensity is 0.3.
      */
-    public static final TweenEquation elasticOut = new TweenEquation("Elastic.OUT", elasticOutFunction(1f, 0.3f));
+    public static final TweenEquation elasticOut = new TweenEquation("Elastic.OUT", elasticOutFunction(2f, 10f, 1f, 0.3f));
 
     /**
-     * Produces a TweenFunction that uses the given scale and intensity variables.
-     * This should act like {@code Elastic.IN} in Universal Tween Engine, with a and p called scale and intensity.
+     * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
+     * When base and exponent are 2 and 10, this should act like {@code Elastic.IN} in Universal Tween Engine,
+     * with a and p called scale and intensity.
      * <br>
      * The functions this method produces are not well-behaved when their {@code alpha} parameter is less than 0.
      * @return a TweenFunction that will use the given configuration
      */
-    public static TweenFunction elasticInFunction(final float scale, final float intensity) {
-        final float b, s;
+    public static TweenFunction elasticInFunction(final float base, final float exponent, final float intensity, final float scale) {
+        final float a, s;
         if(scale < 1f) {
-            b = 1f;
+            a = 1f;
             s = intensity * 0.25f;
         } else {
-            b = scale;
+            a = scale;
             s = intensity / MathUtils.PI2 * MathUtils.asin(1f / scale);
         }
         return alpha -> {
             if(alpha >= 1f) return 1f;
-            return -(b*(float)Math.pow(2f,10f*(alpha-=1f)) * MathUtils.sin( (alpha-s)*MathUtils.PI2/intensity ));
+            return -(a*(float)Math.pow(base,exponent*(alpha-=1f)) * MathUtils.sin( (alpha-s)*MathUtils.PI2/intensity ));
         };
     }
     /**
-     * Goes extra-low near the end, using {@link #elasticInFunction(float, float)}.
+     * Goes extra-low near the end, using {@link #elasticInFunction(float, float, float, float)}.
      * This should act like {@code Elastic.IN} in Universal Tween Engine.
-     * Scale is 1, intensity is 0.3.
+     * Base is 2, exponent is 10, scale is 1, intensity is 0.3.
      */
-    public static final TweenEquation elasticIn = new TweenEquation("Elastic.IN", elasticInFunction(1f, 0.3f));
+    public static final TweenEquation elasticIn = new TweenEquation("Elastic.IN", elasticInFunction(2f, 10f, 1f, 0.3f));
 
     /**
-     * Produces a TweenFunction that uses the given scale and intensity variables.
-     * This should act like {@code Elastic.INOUT} in Universal Tween Engine, but with the IN and OUT halves swapped
-     * and with a and p called scale and intensity.
+     * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
+     * When base and exponent are 2 and 10, this should act like {@code Elastic.INOUT} in Universal Tween Engine,
+     * but with the IN and OUT halves swapped and with a and p called scale and intensity.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
      * @return a TweenFunction that will use the given configuration
      */
-    public static TweenFunction elasticOutInFunction(final float scale, final float intensity) {
-        return elasticFunction(scale, intensity).flip();
+    public static TweenFunction elasticOutInFunction(final float base, final float exponent, final float intensity, final float scale) {
+        return elasticFunction(base, exponent, scale, intensity).flip();
     }
     /**
      * Stays within the mid-range, using {@link #elastic} with {@link TweenFunction#flip()} called on it.
-     * Scale is 1, intensity is 0.45.
+     * Base is 2, exponent is 10, scale is 1, intensity is 0.45.
      */
     public static final TweenEquation elasticOutIn = new TweenEquation("Elastic.OUTIN", elastic.fn.flip());
 
