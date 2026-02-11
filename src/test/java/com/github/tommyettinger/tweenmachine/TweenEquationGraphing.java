@@ -61,6 +61,9 @@ public class TweenEquationGraphing extends ApplicationAdapter {
         batch = new SpriteBatch();
         sd = new ShapeDrawer(batch, new TextureRegion(fontRegion, 510, 510, 1, 1));
 
+        TweenEquation elasticMildOut =
+                new TweenEquation("ElasticMild.OUT", TweenEquations.elasticOutFunction(2f, 10f, 7, 0.9f));
+
         equations = TweenEquations.getTweenEquations();
 
         index = equations.size - 1;
