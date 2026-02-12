@@ -1,7 +1,6 @@
 package com.github.tommyettinger.tweenmachine;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.badlogic.gdx.utils.IdentityMap;
 
 /**
  * Core class of the Tween Engine. A Tween is basically an interpolation
@@ -116,7 +115,7 @@ public final class Tween extends BaseTween<Tween> {
 	// Static -- tween accessors
 	// -------------------------------------------------------------------------
 
-	private static final Map<Class<?>, TweenAccessor<?>> registeredAccessors = new HashMap<>();
+	private static final IdentityMap<Class<?>, TweenAccessor<?>> registeredAccessors = new IdentityMap<>();
 
 	/**
 	 * Registers an accessor with the class of an object. This accessor will be
@@ -125,7 +124,7 @@ public final class Tween extends BaseTween<Tween> {
 	 *
 	 * @param someClass An object class.
 	 * @param defaultAccessor The accessor that will be used to tween any
-	 * object of class "someClass".
+	 * object of class {@code someClass}.
 	 */
 	public static void registerAccessor(Class<?> someClass, TweenAccessor<?> defaultAccessor) {
 		registeredAccessors.put(someClass, defaultAccessor);
@@ -134,7 +133,8 @@ public final class Tween extends BaseTween<Tween> {
 	/**
 	 * Gets the registered TweenAccessor associated with the given object class.
 	 *
-	 * @param someClass An object class.
+	 * @param someClass An object class
+	 * @return the TweenAccessor registered for {@code someClass}, or null if nothing is registered for it
 	 */
 	public static TweenAccessor<?> getRegisteredAccessor(Class<?> someClass) {
 		return registeredAccessors.get(someClass);

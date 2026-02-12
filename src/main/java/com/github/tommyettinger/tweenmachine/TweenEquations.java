@@ -1037,6 +1037,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.INOUT} in Universal Tween Engine,
      * with a and p called scale and intensity.
+     * This does not act like {@code Interpolation.elastic} in libGDX; use
+     * {@link #springFunction(float, float, int, float)} for that.
      * <br>
      * This will typically go outside the 0-1 range for output.
      * <br>
@@ -1062,6 +1064,7 @@ public final class TweenEquations {
     /**
      * Goes extra low, then extra-high, using {@link #elasticFunction(float, float, float, float)}.
      * This should act like {@code Elastic.INOUT} in Universal Tween Engine.
+     * This does not act like {@code Interpolation.elastic} in libGDX; use {@link #spring} for that.
      * <br>
      * This will typically go outside the 0-1 range for output.
      * <br>
@@ -1073,6 +1076,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.OUT} in Universal Tween Engine,
      * with a and p called scale and intensity.
+     * This does not act like {@code Interpolation.elasticOut} in libGDX; use
+     * {@link #springOutFunction(float, float, int, float)} for that.
      * <br>
      * This will typically go outside the 0-1 range for output.
      * <br>
@@ -1097,6 +1102,7 @@ public final class TweenEquations {
     /**
      * Goes extra-high near the start, using {@link #elasticOutFunction(float, float, float, float)}.
      * This should act like {@code Elastic.OUT} in Universal Tween Engine.
+     * This does not act like {@code Interpolation.elasticOut} in libGDX; use {@link #springOut} for that.
      * <br>
      * This will typically go outside the 0-1 range for output.
      * <br>
@@ -1108,6 +1114,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.IN} in Universal Tween Engine,
      * with a and p called scale and intensity.
+     * This does not act like {@code Interpolation.elasticIn} in libGDX; use
+     * {@link #springInFunction(float, float, int, float)} for that.
      * <br>
      * This will typically go outside the 0-1 range for output.
      * <br>
@@ -1130,6 +1138,8 @@ public final class TweenEquations {
     }
     /**
      * Goes extra-low near the end, using {@link #elasticInFunction(float, float, float, float)}.
+     * This should act like {@code Elastic.IN} in Universal Tween Engine.
+     * This does not act like {@code Interpolation.elasticIn} in libGDX; use {@link #springIn} for that.
      * <br>
      * This will typically go outside the 0-1 range for output.
      * <br>
@@ -1142,6 +1152,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.INOUT} in Universal Tween Engine,
      * but with the IN and OUT halves swapped and with a and p called scale and intensity.
+     * This does not act like {@code Interpolation.elastic} in libGDX; use
+     * {@link #springOutInFunction(float, float, int, float)} for that.
      * <br>
      * This will typically stay inside the 0-1 range for output, unless base, exponent, or scale is changed
      * significantly. If base or exponent is much less than base=2 or exponent=10, the result may rarely go outside the
@@ -1156,6 +1168,9 @@ public final class TweenEquations {
     }
     /**
      * Stays within the mid-range, using {@link #elastic} with {@link TweenFunction#flip()} called on it.
+     * This should act like {@code Elastic.INOUT} in Universal Tween Engine, but with the start and end
+     * halves swapped and offset.
+     * This does not act like {@code Interpolation.elastic} in libGDX; use {@link #springOutIn} for that.
      * <br>
      * This will stay inside the 0-1 range for output.
      * <br>
