@@ -694,6 +694,8 @@ public final class TweenEquations {
      * This drops below 0.0 at the start of the range, accelerates very rapidly, exceeds 1.0 at the middle of the input
      * range, and ends returning 1.0. Negative parameters are not supported.
      * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
      * @return a TweenFunction that will use the given configuration
@@ -707,22 +709,32 @@ public final class TweenEquations {
     }
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 2.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing2 = new TweenEquation("Swing2.INOUT", swingFunction(2f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 1.5.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing = new TweenEquation("Swing.INOUT", swingFunction(1.5f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 3.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing3 = new TweenEquation("Swing3.INOUT", swingFunction(3f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 0.75.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing0_75 = new TweenEquation("Swing0_75.INOUT", swingFunction(0.75f));
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 0.5.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing0_5 = new TweenEquation("Swing0_5.INOUT", swingFunction(0.5f));
 
@@ -730,6 +742,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given scale variable.
      * This accelerates very rapidly, exceeds 1.0 at the middle of the input range, and ends returning 1.0. Negative
      * parameters are not supported.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
@@ -740,23 +754,33 @@ public final class TweenEquations {
     }
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 2.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing2Out = new TweenEquation("Swing2.OUT", swingOutFunction(2f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 2. This uses the same function as
      * {@link #swing2Out}.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swingOut = new TweenEquation("Swing.OUT", swing2Out.fn);
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 3.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing3Out = new TweenEquation("Swing3.OUT", swingOutFunction(3f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 0.75.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing0_75Out = new TweenEquation("Swing0_75.OUT", swingOutFunction(0.75f));
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 0.5.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing0_5Out = new TweenEquation("Swing0_5.OUT", swingOutFunction(0.5f));
 
@@ -764,6 +788,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given scale variable.
      * This drops below 0.0 before the middle of the input range, later speeds up rapidly, and ends returning 1.0.
      * Negative parameters are not supported.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
@@ -775,44 +801,64 @@ public final class TweenEquations {
 
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 2.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing2In = new TweenEquation("Swing2.IN", swingInFunction(2f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 2. This uses the same function as
      * {@link #swing2In}.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swingIn = new TweenEquation("Swing.IN", swing2In.fn);
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 3.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing3In = new TweenEquation("Swing3.IN", swingInFunction(3f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 0.75.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing0_75In = new TweenEquation("Swing0_75.IN", swingInFunction(0.75f));
     /**
      * Goes extra-low, using {@link #swingInFunction(float)} and scale of 0.5.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation swing0_5In = new TweenEquation("Swing0_5.IN", swingInFunction(0.5f));
 
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 2, but flipped.
+     * <br>
+     * This will stay inside the 0-1 range for output.
      */
     public static final TweenEquation swing2OutIn = new TweenEquation("Swing2.OUTIN", swing2.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 1.5, but flipped.
+     * <br>
+     * This will stay inside the 0-1 range for output.
      */
     public static final TweenEquation swingOutIn = new TweenEquation("Swing.OUTIN", swing.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 3, but flipped.
+     * <br>
+     * This will stay inside the 0-1 range for output.
      */
     public static final TweenEquation swing3OutIn = new TweenEquation("Swing3.OUTIN", swing3.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 0.75, but flipped.
+     * <br>
+     * This will stay inside the 0-1 range for output.
      */
     public static final TweenEquation swing0_75OutIn = new TweenEquation("Swing0_75.OUTIN", swing0_75.fn.flip());
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 0.5, but flipped.
+     * <br>
+     * This will stay inside the 0-1 range for output.
      */
     public static final TweenEquation swing0_5OutIn = new TweenEquation("Swing0_5.OUTIN", swing0_5.fn.flip());
 
@@ -820,6 +866,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given value, power, bounces, and scale variables.
      * This drops below 0.0 near the middle of the range, accelerates near-instantly, exceeds 1.0 just after that,
      * and ends returning 1.0. Negative parameters are not supported.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
@@ -834,8 +882,11 @@ public final class TweenEquations {
                 : 1f - (float)Math.pow(value, power * ((a = 2f - a - a) - 1f)) * MathUtils.sin(a * bounce) * scale * 0.5f;
     }
     /**
-     * Goes extra low, then extra-high, using {@link #springFunction(float, float, int, float)}. Value is 2, power is
-     * 10, bounces are 7, and scale is 1.
+     * Goes extra low, then extra-high, using {@link #springFunction(float, float, int, float)}.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
+     * Value is 2, power is 10, bounces are 7, and scale is 1.
      */
     public static final TweenEquation spring = new TweenEquation("Spring.INOUT", springFunction(2f, 10f, 7, 1f));
 
@@ -843,6 +894,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given value, power, bounces, and scale variables.
      * This exceeds 1.0 just after the start of the range,
      * and ends returning 1.0. Negative parameters are not supported.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
@@ -859,8 +912,11 @@ public final class TweenEquations {
     }
 
     /**
-     * Goes extra-high near the start, using {@link #springOutFunction(float, float, int, float)}. Value is 2, power is
-     * 10, bounces are 7, and scale is 1.
+     * Goes extra-high near the start, using {@link #springOutFunction(float, float, int, float)}.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
+     * Value is 2, power is 10, bounces are 7, and scale is 1.
      */
     public static final TweenEquation springOut = new TweenEquation("Spring.OUT", springOutFunction(2f, 10f, 7, 1f));
 
@@ -868,6 +924,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given value, power, bounces, and scale variables.
      * This drops below 0.0 just before the end of the range,
      * but jumps up so that it ends returning 1.0. Negative parameters are not supported.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
@@ -883,8 +941,11 @@ public final class TweenEquations {
         };
     }
     /**
-     * Goes extra-low near the end, using {@link #springInFunction(float, float, int, float)}. Value is 2, power is
-     * 10, bounces are 6, and scale is 1.
+     * Goes extra-low near the end, using {@link #springInFunction(float, float, int, float)}.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
+     * Value is 2, power is 10, bounces are 6, and scale is 1.
      */
     public static final TweenEquation springIn = new TweenEquation("Spring.IN", springInFunction(2f, 10f, 6, 1f));
 
@@ -892,6 +953,9 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given value, power, bounces, and scale variables.
      * This accelerates near-instantly, wiggles in to settle near the middle of the range, accelerates again near the
      * end, and finishes returning 1.0. Negative parameters are not supported.
+     * <br>
+     * This will typically stay inside the 0-1 range for output, unless value is much less than 2, power is much less
+     * than 10, or scale is much larger than 1.
      * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
@@ -905,8 +969,11 @@ public final class TweenEquations {
                 : 0.5f - (float)Math.pow(value, power * ((a = 1f - a - a) - 1f)) * MathUtils.sin(a * bounce) * scale * 0.5f;
     }
     /**
-     * Stays within the mid-range, using {@link #springOutInFunction(float, float, int, float)}. Value is 2, power
-     * is 10, bounces are 7, and scale is 1.
+     * Stays within the mid-range, using {@link #springOutInFunction(float, float, int, float)}.
+     * <br>
+     * This will stay inside the 0-1 range for output,
+     * <br>
+     * Value is 2, power is 10, bounces are 7, and scale is 1.
      */
     public static final TweenEquation springOutIn = new TweenEquation("Spring.OUTIN", springOutInFunction(2f, 10f, 7, 1f));
 
@@ -914,6 +981,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.INOUT} in Universal Tween Engine,
      * with a and p called scale and intensity.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code alpha} parameter is less than 0.
      * @return a TweenFunction that will use the given configuration
@@ -937,6 +1006,9 @@ public final class TweenEquations {
     /**
      * Goes extra low, then extra-high, using {@link #elasticFunction(float, float, float, float)}.
      * This should act like {@code Elastic.INOUT} in Universal Tween Engine.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
      * Base is 2, exponent is 10, scale is 1.0, intensity is 0.45.
      */
     public static final TweenEquation elastic = new TweenEquation("Elastic.INOUT", elasticFunction(2, 10, 0.45f, 1f));
@@ -945,6 +1017,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.OUT} in Universal Tween Engine,
      * with a and p called scale and intensity.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code alpha} parameter is less than 0.
      * @return a TweenFunction that will use the given configuration
@@ -967,6 +1041,9 @@ public final class TweenEquations {
     /**
      * Goes extra-high near the start, using {@link #elasticOutFunction(float, float, float, float)}.
      * This should act like {@code Elastic.OUT} in Universal Tween Engine.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
      * Base is 2, exponent is 10, scale is 1, intensity is 0.3.
      */
     public static final TweenEquation elasticOut = new TweenEquation("Elastic.OUT", elasticOutFunction(2f, 10f, 0.3f, 1f));
@@ -975,6 +1052,8 @@ public final class TweenEquations {
      * Produces a TweenFunction that uses the given base, exponent, intensity, and scale variables.
      * When base and exponent are 2 and 10, this should act like {@code Elastic.IN} in Universal Tween Engine,
      * with a and p called scale and intensity.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      * <br>
      * The functions this method produces are not well-behaved when their {@code alpha} parameter is less than 0.
      * @return a TweenFunction that will use the given configuration
@@ -995,6 +1074,9 @@ public final class TweenEquations {
     }
     /**
      * Goes extra-low near the end, using {@link #elasticInFunction(float, float, float, float)}.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
+     * <br>
      * This should act like {@code Elastic.IN} in Universal Tween Engine.
      * Base is 2, exponent is 10, scale is 1, intensity is 0.3.
      */
@@ -1005,6 +1087,10 @@ public final class TweenEquations {
      * When base and exponent are 2 and 10, this should act like {@code Elastic.INOUT} in Universal Tween Engine,
      * but with the IN and OUT halves swapped and with a and p called scale and intensity.
      * <br>
+     * This will typically stay inside the 0-1 range for output, unless base, exponent, or scale is changed
+     * significantly. If base or exponent is much less than base=2 or exponent=10, the result may rarely go outside the
+     * range; the same can happen if scale is much larger than 1.
+     * <br>
      * The functions this method produces are not well-behaved when their {@code a} parameter is less than 0 or greater
      * than 1.
      * @return a TweenFunction that will use the given configuration
@@ -1014,6 +1100,9 @@ public final class TweenEquations {
     }
     /**
      * Stays within the mid-range, using {@link #elastic} with {@link TweenFunction#flip()} called on it.
+     * <br>
+     * This will stay inside the 0-1 range for output.
+     * <br>
      * Base is 2, exponent is 10, scale is 1, intensity is 0.45.
      */
     public static final TweenEquation elasticOutIn = new TweenEquation("Elastic.OUTIN", elastic.fn.flip());
@@ -1127,6 +1216,8 @@ public final class TweenEquations {
     /**
      * Goes extra low, then extra-high, using {@link #swingFunction(float)} and scale of 1.2974547.
      * This matches the default Penner easing function easeInOutBack exactly.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation back = new TweenEquation("Back.INOUT", swingFunction(1.2974547f));
     /**
@@ -1136,17 +1227,23 @@ public final class TweenEquations {
     /**
      * Goes extra-high, using {@link #swingOutFunction(float)} and scale of 1.70158.
      * This matches the default Penner easing function easeOutBack exactly.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation backOut = new TweenEquation("Back.OUT", swingOutFunction(1.70158f));
     /**
      * Goes extra-high, using {@link #swingInFunction(float)} and scale of 1.70158.
      * This matches the default Penner easing function easeOutBack exactly.
+     * <br>
+     * This will typically go outside the 0-1 range for output.
      */
     public static final TweenEquation backIn = new TweenEquation("Back.IN", swingInFunction(1.70158f));
     /**
      * Should stay in-range, using {@link #swingFunction(float)} and scale of 1.2974547, but flipped.
      * This matches the exact parameter of the default Penner easing function easeInOutBack, but with the start and
      * end halves swapped and offset.
+     * <br>
+     * This will stay inside the 0-1 range for output.
      */
     public static final TweenEquation backOutIn = new TweenEquation("Back.OUTIN", back.fn.flip());
 
