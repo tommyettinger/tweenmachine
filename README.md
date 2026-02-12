@@ -43,8 +43,31 @@ This library depends on libGDX 1.12.1 or newer. It doesn't use any features that
 either of those newer versions is fine as well.
 
 ## Get
-[Use JitPack.io for now.](https://jitpack.io/#tommyettinger/tweenmachine/c36c9c26c7) You should typically get the latest
-commit that *isn't* `-SNAPSHOT` if you want the most recent code. When there's been a stable release, you can use that.
+
+You can use Maven Central to get a stable version like any other normal dependency.
+
+In your core/build.gradle file, inside the last `dependencies` block:
+```groovy
+api "com.github.tommyettinger:tweenmachine:7.0.0"
+```
+
+If you use GWT, then you also need this, in html/build.gradle, inside the last `dependencies` block:
+
+```groovy
+implementation "com.github.tommyettinger:tweenmachine:7.0.0:sources"
+```
+
+If you use GWT, regardless of what is in Gradle, you need this in your GdxDefinition.gwt.xml file :
+```xml
+<inherits name="com.github.tommyettinger.tweenmachine" />
+```
+
+*Alternatively...*
+
+[You can also Use JitPack.io !](https://jitpack.io/#tommyettinger/tweenmachine/c36c9c26c7) You would typically get the
+latest commit that *isn't* `-SNAPSHOT` if you want the most recent code. When you click the Commits tab, the most
+recent commits are listed, the first after `-SNAPSHOT` is usually a good choice. You only need to change `c36c9c26c7`
+in the following examples to the 10-hex-digit commit identifier in the left column.
 
 For a recent working commit, you can use this in core/build.gradle, inside the last `dependencies` block:
 ```groovy
@@ -60,14 +83,11 @@ dependencies {
 }
 ```
 
-And for GWT as well, this in your GdxDefinition.gwt.xml file :
-```xml
-<inherits name="com.github.tommyettinger.tweenmachine" />
-```
+This still needs the GdxDefinition.gwt.xml line given above, for GWT only.
 
 ## Docs
 
-JavaDocs should be hosted on [GitHub Pages for this repo](docs/apidocs) for the latest stable release.
+JavaDocs should be hosted on [GitHub Pages for this repo](docs/apidocs/index.html) for the latest stable release.
 
 If you want to see graphs of what each TweenEquation looks like,
 [there are visual aids here](https://tommyettinger.github.io/tweenmachine/equations.html).
