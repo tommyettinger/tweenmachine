@@ -493,7 +493,6 @@ public final class TweenEquations {
      */
     public static final TweenEquation mostlyHigh = new TweenEquation("KumaraswamyD.OUT", kumaraswamyFunction(5f, 1f));
 
-
     /**
      * Produces an TweenFunction that uses the given shape and turning variables.
      * A wrapper around {@link TweenUtils#barronSpline(float, float, float)} to use it
@@ -547,7 +546,6 @@ public final class TweenEquations {
      * Produces more results near 1. Uses {@code biasGainFunction(3f, 0.1f)}.
      */
     public static final TweenEquation biasGainMostlyHigh = new TweenEquation("BiasGainD.OUT", biasGainFunction(3f, 0.1f));
-
 
     /**
      * Moves like a sine wave does; starts slowly, rises quickly, then ends slowly.
