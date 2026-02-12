@@ -20,6 +20,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 
+import static com.github.tommyettinger.tweenmachine.TweenUtils.barronSpline;
+
 /**
  * Provides predefined {@link TweenEquation} constants and ways to generate {@link TweenFunction} instances, as
  * well as acting as the registry for known TweenEquation values so that they can be looked up by name. This has every
@@ -490,6 +492,62 @@ public final class TweenEquations {
      * Produces more results near 1. Uses {@code kumaraswamyFunction(5f, 1f)}.
      */
     public static final TweenEquation mostlyHigh = new TweenEquation("KumaraswamyD.OUT", kumaraswamyFunction(5f, 1f));
+
+
+    /**
+     * Produces an TweenFunction that uses the given shape and turning variables.
+     * A wrapper around {@link TweenUtils#barronSpline(float, float, float)} to use it
+     * as a TweenEquation or TweenFunction. Useful because it can imitate the wide variety of symmetrical
+     * equations by setting turning to 0.5 and shape to some value greater than 1, while also being able to produce
+     * the inverse of those equations by setting shape to some value between 0 and 1. It can also produce
+     * asymmetrical equations by using a turning value other than 0.5 . These asymmetrical equations can be useful
+     * because they can look like an INOUT or an OUTIN equation with one half larger than the other. Most IN or OUT
+     * equations start and end with different derivatives, but if shape is greater than 1, the derivative will approach
+     * 0 at both the start and end, as long as turning is in-between 0 and 1 (both exclusive). If turning is 0, this
+     * will look like an OUT function when shape is greater than 1. If turning is 1, this will look like an IN function
+     * when shape is greater than 1. In the case where shape is less than 1, these will be swapped.
+     *
+     * @param shape   must be greater than or equal to 0; values greater than 1 are more like "INOUT" equations
+     * @param turning a value between 0.0 and 1.0, inclusive, where the shape changes
+     * @return an TweenFunction that will use the given configuration
+     */
+    public static TweenFunction biasGainFunction(final float shape, final float turning) {
+        return a -> barronSpline(a, shape, turning);
+    }
+
+    /**
+     * Produces more results in the center; the first level of centrality. Uses {@code biasGainFunction(0.75f, 0.5f)}.
+     */
+    public static final TweenEquation biasGainCenteredA = new TweenEquation("BiasGainA.OUTIN", biasGainFunction(0.75f, 0.5f));
+    /**
+     * Produces more results in the center; the second level of centrality. Uses {@code biasGainFunction(0.5f, 0.5f)}.
+     */
+    public static final TweenEquation biasGainCenteredB = new TweenEquation("BiasGainB.OUTIN", biasGainFunction(0.5f, 0.5f));
+    /**
+     * Produces more results in the center; the third level of centrality. Uses {@code biasGainFunction(0.25f, 0.5f)}.
+     */
+    public static final TweenEquation biasGainCenteredC = new TweenEquation("BiasGainC.OUTIN", biasGainFunction(0.25f, 0.5f));
+    /**
+     * Produces more results near 0 and near 1; the third level of extremity. Uses {@code biasGainFunction(2f, 0.5f)}.
+     */
+    public static final TweenEquation biasGainExtremeA = new TweenEquation("BiasGainA.INOUT", biasGainFunction(2f, 0.5f));
+    /**
+     * Produces more results near 0 and near 1; the third level of extremity. Uses {@code biasGainFunction(3f, 0.5f)}.
+     */
+    public static final TweenEquation biasGainExtremeB = new TweenEquation("BiasGainB.INOUT", biasGainFunction(3f, 0.5f));
+    /**
+     * Produces more results near 0 and near 1; the third level of extremity. Uses {@code biasGainFunction(4f, 0.5f)}.
+     */
+    public static final TweenEquation biasGainExtremeC = new TweenEquation("BiasGainC.INOUT", biasGainFunction(4f, 0.5f));
+    /**
+     * Produces more results near 0. Uses {@code biasGainFunction(3f, 0.9f)}.
+     */
+    public static final TweenEquation biasGainMostlyLow = new TweenEquation("BiasGainD.IN", biasGainFunction(3f, 0.9f));
+    /**
+     * Produces more results near 1. Uses {@code biasGainFunction(3f, 0.1f)}.
+     */
+    public static final TweenEquation biasGainMostlyHigh = new TweenEquation("BiasGainD.OUT", biasGainFunction(3f, 0.1f));
+
 
     /**
      * Moves like a sine wave does; starts slowly, rises quickly, then ends slowly.
